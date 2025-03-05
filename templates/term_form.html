@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ term.TermID|default('New Academic Term') }} - School Management System{% endblock %}
+
+{% block content %}
+<h1>
+    {% if term %}
+    <i class="fas fa-edit"></i> Edit Academic Term
+    {% else %}
+    <i class="fas fa-plus"></i> Add New Academic Term
+    {% endif %}
+</h1>
+
+<div class="form">
+    <form method="POST" action="{{ action_url }}">
+        <div class="form-group">
+            <label for="term_name"><i class="fas fa-tag"></i> Term Name:</label>
+            <input type="text" id="term_name" name="term_name" value="{{ term.TermName|default('') }}" required>
+            <span class="form-hint">E.g., Fall 2023, Spring 2024</span>
+        </div>
+        
+        <div class="form-group">
+            <label for="start_date"><i class="fas fa-calendar-plus"></i> Start Date:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ term.StartDate.strftime('%Y-%m-%d')|default('') }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="end_date"><i class="fas fa-calendar-minus"></i> End Date:</label>
+            <input type="date" id="end_date" name="end_date" value="{{ term.EndDate.strftime('%Y-%m-%d')|default('') }}" required>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                {% if term %}
+                <i class="fas fa-save"></i> Update Term
+                {% else %}
+                <i class="fas fa-plus"></i> Create Term
+                {% endif %}
+            </button>
+            <a href="{{ url_for('calendar.manage_terms') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const startDate = new Date(document.getElementById('start_date').value);
+        const endDate = new Date(document.getElementById('end_date').value);
+        
+        if (endDate <= startDate) {
+            e.preventDefault();
+            alert('End date must be after start date');
+            return false;
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Exams - {{ course.CourseCode }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-tasks"></i> Course Exams</h1>
+
+<div class="course-details">
+    <h2>{{ course.CourseCode }}: {{ course.CourseName }}</h2>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="flash-message"><i class="fas fa-info-circle"></i> {{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% if session.user_role in ['Admin', 'Staff'] %}
+<div class="action-buttons">
+    <a href="{{ url_for('exams.create_exam', course_id=course.CourseID) }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Exam
+    </a>
+    <a href="{{ url_for('view_course', course_id=course.CourseID) }}" class="btn">
+        <i class="fas fa-arrow-left"></i> Back to Course
+    </a>
+</div>
+{% endif %}
+
+<div class="exams-list">
+    {% if exams %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Max Score</th>
+                <th>Weight (%)</th>
+                {% if session.user_role in ['Admin', 'Staff'] %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in exams %}
+            <tr>
+                <td>{{ exam.ExamName }}</td>
+                <td>{{ exam.ExamDate.strftime('%Y-%m-%d') }}</td>
+                <td>{{ exam.MaxScore }}</td>
+                <td>{{ exam.Weight }}%</td>
+                {% if session.user_role in ['Admin', 'Staff'] %}
+                <td class="actions">
+                    <a href="{{ url_for('exams.edit_exam', exam_id=exam.ExamID) }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{{ url_for('exams.grade_exam', exam_id=exam.ExamID) }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-star"></i> Grade
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-tasks fa-4x"></i>
+        <h3>No Exams</h3>
+        <p>There are no exams for this course yet.</p>
+        {% if session.user_role in ['Admin', 'Staff'] %}
+        <a href="{{ url_for('exams.create_exam', course_id=course.CourseID) }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create First Exam
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

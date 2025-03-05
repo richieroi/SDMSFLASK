@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-book"></i> {{ title }}</h1>
+
+<form method="POST" action="{{ action_url }}" class="form">
+    <div class="form-group">
+        <label for="courseCode">Course Code</label>
+        <input type="text" id="courseCode" name="courseCode" value="{{ course.CourseCode if course else '' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="courseName">Course Name</label>
+        <input type="text" id="courseName" name="courseName" value="{{ course.CourseName if course else '' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="credits">Credits</label>
+        <input type="number" id="credits" name="credits" value="{{ course.Credits if course else '' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" required>{{ course.Description if course else '' }}</textarea>
+    </div>
+    
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
+        <a href="{{ url_for('courses') }}" class="btn">Cancel</a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Navbar - School Management System{% endblock %}
+
+{% block content %}
+<nav class="navbar">
+    <div class="nav-links">
+        <div class="logo-area">
+            <i class="fas fa-graduation-cap"></i> 
+            <span>School Management</span>
+        </div>
+        
+        <div class="navbar-toggle" id="navbarToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="nav-menu navbar-links" id="navbarLinks">
+            {% if session.user_role == 'Admin' %}
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{ url_for('students_list') }}"><i class="fas fa-users"></i> Students</a>
+                <a href="{{ url_for('courses') }}"><i class="fas fa-book"></i> Courses</a>
+                <a href="{{ url_for('manage_users') }}"><i class="fas fa-user-shield"></i> Users</a>
+                <a href="{{ url_for('view_audit_logs') }}"><i class="fas fa-history"></i> Logs</a>
+            {% elif session.user_role == 'Staff' %}
+                <a href="{{ url_for('staff_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{ url_for('students_list') }}"><i class="fas fa-users"></i> Students</a>
+                <a href="{{ url_for('courses') }}"><i class="fas fa-book"></i> Courses</a>
+            {% elif session.user_role == 'Student' %}
+                <a href="{{ url_for('student_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{ url_for('student_courses') }}"><i class="fas fa-book"></i> My Courses</a>
+                <a href="{{ url_for('browse_courses') }}"><i class="fas fa-search"></i> Browse Courses</a>
+            {% endif %}
+            
+            <div class="user-menu">
+                <span>{{ session.username }}</span>
+                <i class="fas fa-caret-down"></i>
+                <div class="user-menu-content">
+                    <a href="{{ url_for('edit_profile') }}"><i class="fas fa-user-edit"></i> Edit Profile</a>
+                    <a href="{{ url_for('change_password') }}"><i class="fas fa-key"></i> Change Password</a>
+                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}

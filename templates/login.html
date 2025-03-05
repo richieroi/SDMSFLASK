@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Login - School Management System{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <h1>School Management System</h1>
+    </div>
+    
+    <form method="POST" action="{{ url_for('auth.login') }}">
+        <div class="form-group">
+            <label for="username"><i class="fas fa-user"></i> Username</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+        
+        <div class="form-group">
+            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </div>
+    </form>
+    
+    <div class="login-links">
+        <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+    </div>
+</div>
+
+<style>
+
+    body {
+        width: 100%;
+        max-width: 700px;
+        padding: 30px;
+        background: white;
+        border-radius: 50px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 50px auto;
+        background-image: url("{{ url_for('static', filename='images/school-bg.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    .login-container{
+        
+    }
+    .login-logo {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .login-logo i {
+        font-size: 3rem;
+        color: var(--primary-color);
+    }
+    
+    .login-logo h1 {
+        margin-top: 10px;
+        font-size: 1.8rem;
+        border-bottom: none;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: white;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .form-actions {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .login-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+    
+    .login-btn:hover {
+        background-color: var(--primary-dark);
+    }
+    
+    .login-links {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .login-links a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+    
+    .login-links a:hover {
+        text-decoration: underline;
+    }
+    
+    .flash-container {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 500px;
+        z-index: 1000;
+    }
+
+
+</style>
+
+<script>
+    // Fade out flash messages after 5 seconds
+    setTimeout(function() {
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(message => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => message.remove(), 500);
+        });
+    }, 5000);
+</script>
+{% endblock %}

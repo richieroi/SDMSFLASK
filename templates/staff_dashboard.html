@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Dashboard - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-chalkboard-teacher"></i> Staff Dashboard</h1>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <i class="fas fa-users"></i>
+        <div class="stat-number">{{ student_count }}</div>
+        <div class="stat-text">Students</div>
+    </div>
+    
+    <div class="stat-card">
+        <i class="fas fa-book"></i>
+        <div class="stat-number">{{ course_count }}</div>
+        <div class="stat-text">Courses</div>
+    </div>
+    
+    <div class="stat-card">
+        <i class="fas fa-calendar"></i>
+        <div class="stat-number">{{ today_date }}</div>
+        <div class="stat-text">Today's Date</div>
+    </div>
+</div>
+
+<h2><i class="fas fa-th-large"></i> Core Management</h2>
+
+<div class="dashboard-cards">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-book"></i>
+            <h3>Course Management</h3>
+        </div>
+        <div class="card-body">
+            <p>Manage courses, create new courses, and view enrollments</p>
+            <div class="card-actions">
+                <a href="{{ url_for('courses') }}" class="btn btn-primary"><i class="fas fa-list"></i> View All Courses</a>
+                <a href="{{ url_for('create_course') }}" class="btn btn-info"><i class="fas fa-plus"></i> Add New Course</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-users"></i>
+            <h3>Student Management</h3>
+        </div>
+        <div class="card-body">
+            <p>Manage students, view profiles, and grade students</p>
+            <div class="card-actions">
+                <a href="{{ url_for('students_list') }}" class="btn btn-primary"><i class="fas fa-list"></i> View All Students</a>
+                <a href="{{ url_for('create_student') }}" class="btn btn-info"><i class="fas fa-user-plus"></i> Add New Student</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2><i class="fas fa-puzzle-piece"></i> Advanced Features</h2>
+
+<div class="dashboard-cards">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-bullhorn"></i>
+            <h3>Announcements</h3>
+        </div>
+        <div class="card-body">
+            <p>Create and manage school-wide announcements</p>
+            <div class="card-actions">
+                <a href="{{ url_for('announcements.view_announcements') }}" class="btn btn-primary">
+                    <i class="fas fa-list"></i> View All
+                </a>
+                <a href="{{ url_for('announcements.create_announcement') }}" class="btn btn-info">
+                    <i class="fas fa-plus"></i> New Announcement
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-clipboard-check"></i>
+            <h3>Attendance</h3>
+        </div>
+        <div class="card-body">
+            <p>Take attendance for your courses</p>
+            <div class="card-actions">
+                <p class="card-note">Select a course to take attendance</p>
+                <a href="{{ url_for('courses') }}" class="btn btn-primary">
+                    <i class="fas fa-book"></i> Go to Courses
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            <h3>Exams</h3>
+        </div>
+        <div class="card-body">
+            <p>Create and manage course exams</p>
+            <div class="card-actions">
+                <p class="card-note">Select a course to manage exams</p>
+                <a href="{{ url_for('courses') }}" class="btn btn-primary">
+                    <i class="fas fa-book"></i> Go to Courses
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>Analytics</h3>
+        </div>
+        <div class="card-body">
+            <p>View enrollment trends and academic performance</p>
+            <div class="card-actions">
+                <a href="{{ url_for('analytics.dashboard') }}" class="btn btn-primary">
+                    <i class="fas fa-chart-bar"></i> View Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-enrollments">
+    <h2><i class="fas fa-clipboard-list"></i> Recent Enrollments</h2>
+    
+    {% if recent_enrollments %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in recent_enrollments %}
+            <tr>
+                <td>{{ enrollment.FirstName }} {{ enrollment.LastName }}</td>
+                <td>{{ enrollment.CourseCode }}: {{ enrollment.CourseName }}</td>
+                <td>{{ enrollment.EnrollmentDate.strftime('%Y-%m-%d') if enrollment.EnrollmentDate else 'N/A' }}</td>
+                <td>
+                    <a href="{{ url_for('update_grade', enrollment_id=enrollment.EnrollmentID) }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-star"></i> Grade
+                    </a>
+                    <a href="{{ url_for('view_student', student_id=enrollment.StudentID) }}" class="btn btn-info btn-sm">
+                        <i class="fas fa-eye"></i> Student
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No recent enrollment activity</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

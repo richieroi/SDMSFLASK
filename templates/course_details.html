@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.CourseCode }} - {{ course.CourseName }} - School Management System{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="dashboard-title">
+        <h1><i class="fas fa-book"></i> {{ course.CourseCode }}: {{ course.CourseName }}</h1>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('browse_courses') }}" class="btn">
+            <i class="fas fa-arrow-left"></i> Back to Courses
+        </a>
+    </div>
+</div>
+
+<div class="dashboard-cards">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-info-circle"></i>
+            <h3>Course Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="detail-row">
+                <span class="detail-label">Course Code:</span>
+                <span class="detail-value">{{ course.CourseCode }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Name:</span>
+                <span class="detail-value">{{ course.CourseName }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Credits:</span>
+                <span class="detail-value">{{ course.Credits }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Description:</span>
+                <span class="detail-value">{{ course.Description }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_enrolled %}
+<div class="alert alert-success">
+    <i class="fas fa-check-circle"></i> You are enrolled in this course.
+</div>
+{% else %}
+<form method="POST" action="{{ url_for('student_enroll', course_id=course.CourseID) }}">
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Enroll in this Course
+    </button>
+</form>
+{% endif %}
+
+<style>
+    .detail-row {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: bold;
+        width: 120px;
+        color: var(--dark-color);
+    }
+    
+    .detail-value {
+        flex: 1;
+    }
+</style>
+{% endblock %}

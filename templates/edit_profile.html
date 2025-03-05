@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle fa-5x"></i>
+                </div>
+                <div class="profile-info">
+                    <h2>{{ user.UserName }}</h2>
+                    <div class="profile-meta">
+                        <i class="fas fa-envelope"></i> {{ user.Email }}
+                    </div>
+                    <div class="profile-meta">
+                        <i class="fas fa-user-tag"></i> {{ session.user_role }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form">
+            <form action="{{ url_for('edit_profile') }}" method="post">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username:</label>
+                    <input type="text" id="username" name="username" value="{{ user.UserName }}" readonly>
+                    <div class="form-hint">Username cannot be changed</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="email" name="email" value="{{ user.Email }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="current_password"><i class="fas fa-lock"></i> Current Password (required to change password):</label>
+                    <input type="password" id="current_password" name="current_password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> New Password (leave blank to keep current):</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password"><i class="fas fa-lock"></i> Confirm New Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                    
+                    {% if session.user_role == 'Admin' %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
+                    {% elif session.user_role == 'Staff' %}
+                        <a href="{{ url_for('staff_dashboard') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
+                    {% else %}
+                        <a href="{{ url_for('student_dashboard') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const newPassword = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        const currentPassword = document.getElementById('current_password').value;
+        
+        // Only validate passwords if the user is trying to change them
+        if (newPassword) {
+            if (newPassword !== confirmPassword) {
+                e.preventDefault();
+                alert('New passwords do not match');
+                return false;
+            }
+            
+            if (newPassword.length < 8) {
+                e.preventDefault();
+                alert('Password must be at least 8 characters long');
+                return false;
+            }
+            
+            if (!currentPassword) {
+                e.preventDefault();
+                alert('Current password is required to set a new password');
+                return false;
+            }
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

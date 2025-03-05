@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-chart-line"></i> Analytics Dashboard</h1>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="chart-container">
+            <h3><i class="fas fa-users"></i> Enrollment Trends</h3>
+            <canvas id="enrollmentChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="chart-container">
+            <h3><i class="fas fa-chart-pie"></i> Grade Distribution</h3>
+            <canvas id="gradeChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="chart-container">
+            <h3><i class="fas fa-book"></i> Course Popularity</h3>
+            <canvas id="popularityChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Parse the data from the server
+        const enrollmentTrends = {{ enrollment_trends|safe }};
+        const gradeDistribution = {{ grade_distribution|safe }};
+        const coursePopularity = {{ course_popularity|safe }};
+        
+        // Create enrollment trends chart
+        const enrollmentLabels = enrollmentTrends.map(item => item.month);
+        const enrollmentData = enrollmentTrends.map(item => item.count);
+        
+        new Chart(document.getElementById('enrollmentChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: enrollmentLabels,
+                datasets: [{
+                    label: 'Enrollments',
+                    data: enrollmentData,
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly Enrollment Trends'
+                    }
+                }
+            }
+        });
+        
+        // Create grade distribution chart
+        const gradeLabels = gradeDistribution.map(item => item.grade || 'No Grade');
+        const gradeData = gradeDistribution.map(item => item.count);
+        
+        new Chart(document.getElementById('gradeChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: gradeLabels,
+                datasets: [{
+                    data: gradeData,
+                    backgroundColor: [
+                        '#2ecc71', // A
+                        '#3498db', // B
+                        '#f1c40f', // C
+                        '#e67e22', // D
+                        '#e74c3c', // F
+                        '#95a5a6'  // No grade
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Grade Distribution'
+                    }
+                }
+            }
+        });
+        
+        // Create course popularity chart
+        const courseLabels = coursePopularity.map(item => item.course);
+        const courseData = coursePopularity.map(item => item.count);
+        
+        new Chart(document.getElementById('popularityChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: courseLabels,
+                datasets: [{
+                    label: 'Enrollments',
+                    data: courseData,
+                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                    borderColor: '#2980b9',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Most Popular Courses'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

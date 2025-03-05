@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}View Details - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-info-circle"></i> View Details</h1>
+
+<div class="detail-view">
+    <div class="detail-row">
+        <span class="detail-label">ID:</span>
+        <span class="detail-value">{{ details.id }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="detail-label">Name:</span>
+        <span class="detail-value">{{ details.name }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="detail-label">Description:</span>
+        <span class="detail-value">{{ details.description }}</span>
+    </div>
+</div>
+
+<style>
+    .detail-view {
+        margin-top: 20px;
+    }
+    
+    .detail-row {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: bold;
+        width: 150px;
+        color: var(--dark-color);
+    }
+    
+    .detail-value {
+        flex: 1;
+    }
+</style>
+{% endblock %}

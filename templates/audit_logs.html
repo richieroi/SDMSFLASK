@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Audit Logs - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-history"></i> Audit Logs</h1>
+
+<div class="filter-section">
+    <form method="GET" action="{{ url_for('view_audit_logs') }}">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="action">Filter by Action:</label>
+                <select name="action" id="action" class="form-control">
+                    <option value="">All Actions</option>
+                    <option value="LOGIN" {% if request.args.get('action') == 'LOGIN' %}selected{% endif %}>Login</option>
+                    <option value="LOGOUT" {% if request.args.get('action') == 'LOGOUT' %}selected{% endif %}>Logout</option>
+                    <option value="CREATE" {% if request.args.get('action') == 'CREATE' %}selected{% endif %}>Create</option>
+                    <option value="UPDATE" {% if request.args.get('action') == 'UPDATE' %}selected{% endif %}>Update</option>
+                    <option value="DELETE" {% if request.args.get('action') == 'DELETE' %}selected{% endif %}>Delete</option>
+                    <!-- Add more actions as needed -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="table">Filter by Table:</label>
+                <select name="table" id="table" class="form-control">
+                    <option value="">All Tables</option>
+                    <option value="Students_198" {% if request.args.get('table') == 'Students_198' %}selected{% endif %}>Students</option>
+                    <option value="Courses_198" {% if request.args.get('table') == 'Courses_198' %}selected{% endif %}>Courses</option>
+                    <option value="Users_198" {% if request.args.get('table') == 'Users_198' %}selected{% endif %}>Users</option>
+                    <option value="Enrollments_198" {% if request.args.get('table') == 'Enrollments_198' %}selected{% endif %}>Enrollments</option>
+                    <!-- Add more tables as needed -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <a href="{{ url_for('view_audit_logs') }}" class="btn">Clear</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-list"></i>
+        <h3>System Activity Logs</h3>
+    </div>
+    <div class="card-body">
+        {% if logs %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Action</th>
+                        <th>Table</th>
+                        <th>Record ID</th>
+                        <th>Description</th>
+                        <th>User</th>
+                        <th>Timestamp</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.LogID }}</td>
+                        <td>
+                            {% if log.Action == 'LOGIN' %}
+                                <span class="badge badge-success">{{ log.Action }}</span>
+                            {% elif log.Action == 'LOGOUT' %}
+                                <span class="badge badge-info">{{ log.Action }}</span>
+                            {% elif log.Action == 'CREATE' or log.Action == 'INSERT' %}
+                                <span class="badge badge-primary">{{ log.Action }}</span>
+                            {% elif log.Action == 'UPDATE' %}
+                                <span class="badge badge-warning">{{ log.Action }}</span>
+                            {% elif log.Action == 'DELETE' %}
+                                <span class="badge badge-danger">{{ log.Action }}</span>
+                            {% else %}
+                                <span class="badge">{{ log.Action }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ log.TableName }}</td>
+                        <td>{{ log.RecordID }}</td>
+                        <td>{{ log.NewValue }}</td>
+                        <td>{{ log.Username }}</td>
+                        <td>{{ log.Timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            {% if log.OldValue %}
+                            <details>
+                                <summary>View Changes</summary>
+                                <div class="log-details">
+                                    <strong>Before:</strong> {{ log.OldValue }}<br>
+                                    <strong>After:</strong> {{ log.NewValue }}
+                                </div>
+                            </details>
+                            {% else %}
+                            <span class="text-muted">No details</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-info-circle fa-3x"></i>
+            <h3>No Logs Found</h3>
+            <p>There are no audit logs matching your filter criteria.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+    }
+    
+    .badge-success {
+        background-color: var(--success-color);
+    }
+    
+    .badge-primary {
+        background-color: var(--primary-color);
+    }
+    
+    .badge-info {
+        background-color: var(--info-color);
+    }
+    
+    .badge-warning {
+        background-color: var(--warning-color);
+    }
+    
+    .badge-danger {
+        background-color: var(--danger-color);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+    
+    .empty-state i {
+        color: var(--gray-color);
+        margin-bottom: 15px;
+    }
+    
+    .empty-state h3 {
+        margin-bottom: 10px;
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}

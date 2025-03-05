@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-users-cog"></i> User Management</h1>
+
+logins<div class="dashboard-header">
+    <div class="dashboard-title">
+        <h2>Manage Users</h2>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('create_user') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Add New User
+        </a>
+    </div>
+</div>
+
+<div class="filter-section">
+    <form method="GET" action="{{ url_for('manage_users') }}">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="role">Filter by Role:</label>
+                <select name="role" id="role" class="form-control">
+                    <option value="">All Roles</option>
+                    <option value="Admin" {% if request.args.get('role') == 'Admin' %}selected{% endif %}>Admin</option>
+                    <option value="Staff" {% if request.args.get('role') == 'Staff' %}selected{% endif %}>Staff</option>
+                    <option value="Student" {% if request.args.get('role') == 'Student' %}selected{% endif %}>Student</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="status">Filter by Status:</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="">All Status</option>
+                    <option value="1" {% if request.args.get('status') == '1' %}selected{% endif %}>Active</option>
+                    <option value="0" {% if request.args.get('status') == '0' %}selected{% endif %}>Inactive</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" value="{{ request.args.get('search', '') }}" placeholder="Search users..." class="form-control">
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <a href="{{ url_for('manage_users') }}" class="btn">Clear</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-list"></i>
+        <h3>User List</h3>
+    </div>
+    <div class="card-body">
+        {% if users %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.UserID }}</td>
+                        <td>{{ user.UserName }}</td>
+                        <td>{{ user.Email }}</td>
+                        <td><span class="role-badge role-{{ user.RoleName|lower }}">{{ user.RoleName }}</span></td>
+                        <td>
+                            {% if user.Active %}
+                            <span class="status status-active">Active</span>
+                            {% else %}
+                            <span class="status status-inactive">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.LastLogin.strftime('%Y-%m-%d %H:%M:%S') if user.LastLogin else 'Never' }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('edit_user', user_id=user.UserID) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                
+                                {% if user.UserID != session.user_id %}
+                                    {% if user.Active %}
+                                    <form method="POST" action="{{ url_for('deactivate_user', user_id=user.UserID) }}" class="inline-form">
+                                        <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to deactivate this user?');">
+                                            <i class="fas fa-user-slash"></i> Deactivate
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <form method="POST" action="{{ url_for('activate_user', user_id=user.UserID) }}" class="inline-form">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="fas fa-user-check"></i> Activate
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">(Current User)</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-users fa-3x"></i>
+            <h3>No Users Found</h3>
+            <p>There are no users matching your filter criteria.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .status {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .status-active {
+        background-color: var(--success-color);
+        color: white;
+    }
+    
+    .status-inactive {
+        background-color: var(--gray-color);
+        color: white;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    
+    .role-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-size: 0.85rem;
+        color: white;
+    }
+    
+    .role-admin {
+        background-color: #c0392b;
+    }
+    
+    .role-staff {
+        background-color: #d35400;
+    }
+    
+    .role-student {
+        background-color: #2980b9;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+    
+    .empty-state i {
+        color: var(--gray-color);
+        margin-bottom: 15px;
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}

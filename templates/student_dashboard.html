@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-tachometer-alt"></i> Student Dashboard</h1>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <i class="fas fa-book"></i>
+        <div class="stat-number">{{ enrolled_courses|length }}</div>
+        <div class="stat-text">Enrolled Courses</div>
+    </div>
+    
+    <div class="stat-card">
+        <i class="fas fa-graduation-cap"></i>
+        <div class="stat-number">{{ gpa|default('N/A') }}</div>
+        <div class="stat-text">Current GPA</div>
+    </div>
+</div>
+
+<h2><i class="fas fa-book"></i> My Courses</h2>
+
+{% if enrolled_courses %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Course Name</th>
+                <th>Credits</th>
+                <th>Grade</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in enrolled_courses %}
+            <tr>
+                <td>{{ course.CourseCode }}</td>
+                <td>{{ course.CourseName }}</td>
+                <td>{{ course.Credits }}</td>
+                <td>{{ course.Grade|default('Not graded') }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('view_course_details', course_id=course.CourseID) }}" class="btn btn-info">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="empty-state">
+        <i class="fas fa-book-open fa-4x"></i>
+        <h3>No Enrolled Courses</h3>
+        <p>You are not enrolled in any courses yet.</p>
+        <a href="{{ url_for('browse_courses') }}" class="btn btn-primary btn-large">
+            <i class="fas fa-search"></i> Browse Available Courses
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

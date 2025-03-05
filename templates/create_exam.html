@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Create Exam - {{ course.CourseCode }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-tasks"></i> Create New Exam</h1>
+
+<div class="course-details">
+    <h2>{{ course.CourseCode }}: {{ course.CourseName }}</h2>
+</div>
+
+<div class="form">
+    <form method="POST">
+        <div class="form-group">
+            <label for="exam_name"><i class="fas fa-heading"></i> Exam Name:</label>
+            <input type="text" id="exam_name" name="exam_name" required>
+            <div class="form-hint">E.g., Midterm, Final Exam, Quiz 1</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="exam_date"><i class="fas fa-calendar"></i> Exam Date:</label>
+            <input type="date" id="exam_date" name="exam_date" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="max_score"><i class="fas fa-check"></i> Maximum Score:</label>
+            <input type="number" id="max_score" name="max_score" min="1" required>
+            <div class="form-hint">The maximum points possible for this exam</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="weight"><i class="fas fa-percentage"></i> Weight (%):</label>
+            <input type="number" id="weight" name="weight" min="0" max="100" step="0.1" required>
+            <div class="form-hint">Percentage weight in the final grade</div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create Exam</button>
+            <a href="{{ url_for('exams.course_exams', course_id=course.CourseID) }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

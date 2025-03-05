@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School Management System{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container {% if session.user_role %}theme-{{ session.user_role|lower }}{% endif %}">
+        {% if session.user_id %}
+<nav class="navbar">
+    <div class="navbar-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>School Management</span>
+    </div>
+    
+    <div class="navbar-toggle" id="navbarToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <div class="navbar-links" id="navbarLinks">
+        {% if session.user_role == 'Admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.path == url_for('admin_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{{ url_for('students_list') }}" class="{{ 'active' if '/students' in request.path }}">
+                <i class="fas fa-users"></i> Students
+            </a>
+            <a href="{{ url_for('courses') }}" class="{{ 'active' if '/course' in request.path }}">
+                <i class="fas fa-book"></i> Courses
+            </a>
+            <a href="{{ url_for('view_audit_logs') }}" class="{{ 'active' if '/audit-logs' in request.path }}">
+                <i class="fas fa-history"></i> Logs
+            </a>
+            <a href="{{ url_for('manage_users') }}" class="{{ 'active' if '/user' in request.path }}">
+                <i class="fas fa-users-cog"></i> Users
+            </a>
+        {% elif session.user_role == 'Staff' %}
+            <a href="{{ url_for('staff_dashboard') }}" class="{{ 'active' if request.path == url_for('staff_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{{ url_for('students_list') }}" class="{{ 'active' if '/students' in request.path }}">
+                <i class="fas fa-users"></i> Students
+            </a>
+            <a href="{{ url_for('courses') }}" class="{{ 'active' if '/course' in request.path }}">
+                <i class="fas fa-book"></i> Courses
+            </a>
+            <a href="{{ url_for('attendance.take_attendance', course_id=1) }}" class="{{ 'active' if '/attendance' in request.path }}">
+                <i class="fas fa-clipboard-check"></i> Attendance
+            </a>
+        {% elif session.user_role == 'Student' %}
+            <a href="{{ url_for('student_dashboard') }}" class="{{ 'active' if request.path == url_for('student_dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{{ url_for('student_courses') }}" class="{{ 'active' if request.path == url_for('student_courses') }}">
+                <i class="fas fa-book"></i> My Courses
+            </a>
+            <a href="{{ url_for('browse_courses') }}" class="{{ 'active' if request.path == url_for('browse_courses') }}">
+                <i class="fas fa-search"></i> Browse Courses
+            </a>
+        {% endif %}
+    </div>
+    
+    <div class="navbar-user">
+        <div class="role-badge role-{{ session.user_role|lower }}">{{ session.user_role }}</div>
+        <div class="user-menu">
+            <span>{{ session.username }} <i class="fas fa-caret-down"></i></span>
+            <div class="user-menu-content">
+                <a href="{{ url_for('edit_profile') }}">
+                    <i class="fas fa-user-edit"></i> Edit Profile
+                </a>
+                <a href="{{ url_for('change_password') }}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+                <a href="{{ url_for('auth.logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endif %}
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message"><i class="fas fa-info-circle"></i> {{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Mobile navigation toggle
+        document.getElementById('navbarToggle').addEventListener('click', function() {
+            document.getElementById('navbarLinks').classList.toggle('show');
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

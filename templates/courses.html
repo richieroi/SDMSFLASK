@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-book"></i> Course Management</h1>
+
+<div class="dashboard-header">
+    <div class="dashboard-title">
+        <h2>All Courses</h2>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('create_course') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Course
+        </a>
+    </div>
+</div>
+
+<div class="filter-section">
+    <form method="GET" action="{{ url_for('courses') }}">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="search">Search Courses:</label>
+                <input type="text" id="search" name="search" value="{{ search_term }}" placeholder="Search by code or name..." class="form-control">
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                {% if search_term %}
+                <a href="{{ url_for('courses') }}" class="btn">Clear</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if courses %}
+<div class="card-grid-3">
+    {% for course in courses %}
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-book"></i>
+            <h3>{{ course.CourseCode }}</h3>
+        </div>
+        <div class="card-body">
+            <h4>{{ course.CourseName }}</h4>
+            <p>{{ course.Description }}</p>
+            <p><strong>Credits:</strong> {{ course.Credits }}</p>
+            <div class="card-actions">
+                <a href="{{ url_for('view_course', course_id=course.CourseID) }}" class="btn btn-info">
+                    <i class="fas fa-eye"></i> View
+                </a>
+                <a href="{{ url_for('edit_course', course_id=course.CourseID) }}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <form method="POST" action="{{ url_for('delete_course', course_id=course.CourseID) }}" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-search fa-3x"></i>
+    <h3>No Courses Found</h3>
+    <p>There are no courses matching your search criteria or no courses have been added yet.</p>
+    <a href="{{ url_for('create_course') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Course
+    </a>
+</div>
+{% endif %}
+
+<style>
+    .card-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background-color: #f9fafb;
+        border-radius: 8px;
+        margin: 30px 0;
+    }
+    
+    .empty-state i {
+        color: var(--gray-color);
+        margin-bottom: 15px;
+    }
+    
+    .empty-state h3 {
+        margin-bottom: 10px;
+    }
+    
+    .empty-state p {
+        color: var(--gray-color);
+        margin-bottom: 25px;
+    }
+</style>
+{% endblock %}
