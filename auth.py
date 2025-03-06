@@ -166,9 +166,9 @@ def register():
         # Hash password and insert user - Update column name here
         hashed_password = hash_password(password)
         cursor.execute("""
-            INSERT INTO Users_198 (UserName, PasswordHash, Email, RoleID)
-            VALUES (?, ?, ?, ?)
-        """, username, hashed_password, email, role_id)
+            INSERT INTO Users_198 (UserName, PasswordHash, Email, RoleID, Active)
+            VALUES (?, ?, ?, ?, 1)
+        """, (username, hashed_password, email, role_id))
         
         conn.commit()
         

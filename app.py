@@ -171,20 +171,26 @@ def student_dashboard():
     
     # First check if we need to create a student record for this user
     cursor.execute("""
-        SELECT COUNT(*) FROM Students_198 s 
+        SELECT s.* FROM Students_198 s 
         WHERE s.Email = ?
     """, email)
     
-    student_exists = cursor.fetchone()[0] > 0
+    student = None
     student_id = None
     enrolled_courses = []
-    gpa = None
+    recent_announcements = []
     
-    if not student_exists:
+    row = cursor.fetchone()
+    if row:
+        columns = [column[0] for column in cursor.description]
+        student = dict(zip(columns, row))
+        student_id = student['StudentID']
+    
+    # If we don't have a student record, create one
+    if not student:
         # Create a new student record for this user
         try:
             # Extract first and last name from username or email
-            # This is a simple implementation - you may need a more sophisticated approach
             name_parts = username.split('.')
             if len(name_parts) > 1:
                 first_name = name_parts[0].capitalize()
@@ -201,50 +207,53 @@ def student_dashboard():
             conn.commit()
             flash(f"Welcome! We've created your student profile.")
             
-            # Get the newly created student ID
-            cursor.execute("SELECT StudentID FROM Students_198 WHERE Email = ?", email)
-            student_id = cursor.fetchone()[0]
+            # Get the newly created student record
+            cursor.execute("""
+                SELECT s.* FROM Students_198 s 
+                WHERE s.Email = ?
+            """, email)
+            
+            columns = [column[0] for column in cursor.description]
+            student = dict(zip(columns, cursor.fetchone()))
+            student_id = student['StudentID']
         except Exception as e:
             conn.rollback()
             flash(f"Error creating student profile: {str(e)}")
-    else:
-        # Get the existing student ID
-        cursor.execute("SELECT StudentID FROM Students_198 WHERE Email = ?", email)
-        student_id = cursor.fetchone()[0]
+    
+    # Now get enrolled courses
+    if student_id:
+        cursor.execute("""
+            SELECT c.*, e.Grade, e.EnrollmentDate
+            FROM Courses_198 c
+            JOIN Enrollments_198 e ON c.CourseID = e.CourseID
+            WHERE e.StudentID = ?
+            ORDER BY e.EnrollmentDate DESC
+        """, student_id)
         
-        # Now get enrolled courses
-        if student_id:
-            cursor.execute("""
-                SELECT c.*, e.Grade, e.EnrollmentDate
-                FROM Courses_198 c
-                JOIN Enrollments_198 e ON c.CourseID = e.CourseID
-                WHERE e.StudentID = ?
-                ORDER BY e.EnrollmentDate DESC
-            """, student_id)
-            
-            enrolled_courses = [dict(zip([column[0] for column in cursor.description], row))
+        enrolled_courses = [dict(zip([column[0] for column in cursor.description], row))
+                           for row in cursor.fetchall()]
+        
+        # Get recent announcements
+        cursor.execute("""
+            SELECT TOP 5 a.*
+            FROM Announcements_198 a
+            ORDER BY a.PublishDate DESC
+        """)
+        
+        recent_announcements = [dict(zip([column[0] for column in cursor.description], row))
                                for row in cursor.fetchall()]
-            
-            # Calculate GPA
-            grades_map = {'A': 4.0, 'B': 3.0, 'C': 2.0, 'D': 1.0, 'F': 0.0}
-            total_credits = 0
-            total_grade_points = 0
-            
-            for course in enrolled_courses:
-                if course.get('Grade') in grades_map and course.get('Credits'):
-                    total_credits += course['Credits']
-                    total_grade_points += grades_map[course['Grade']] * course['Credits']
-            
-            if total_credits > 0:
-                gpa = round(total_grade_points / total_credits, 2)
     
     cursor.close()
     conn.close()
     
+    # Get current term
+    current_term = "Spring 2023"  # This could be dynamically determined
+    
     return render_template('student_dashboard.html', 
-                           enrolled_courses=enrolled_courses, 
-                           gpa=gpa,
-                           student_id=student_id)
+                         student=student,
+                         enrolled_courses=enrolled_courses,
+                         recent_announcements=recent_announcements,
+                         current_term=current_term)
 
 @app.route('/student/<int:student_id>')
 def view_student(student_id):

@@ -47,6 +47,7 @@
     </div>
 </div>
 {% endif %}
+
 <div class="dashboard-sections">
     <div class="dashboard-section">
         <div class="section-header">
@@ -55,7 +56,7 @@
         </div>
         
         <div class="section-content">
-            {% if recent_announcements %}
+            {% if recent_announcements and recent_announcements|length > 0 %}
                 {% for announcement in recent_announcements %}
                 <div class="announcement-item">
                     <div class="announcement-title">
