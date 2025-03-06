@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Records - {{ student.FirstName }} {{ student.LastName }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-clipboard-check"></i> Student Attendance</h1>
+
+<div class="student-details">
+    <h2>{{ student.FirstName }} {{ student.LastName }}</h2>
+    <p><strong>Email:</strong> {{ student.Email }}</p>
+    <p><strong>ID:</strong> {{ student.StudentID }}</p>
+</div>
+
+<div class="attendance-stats">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-percentage"></i>
+        </div>
+        <div class="stat-number">{{ attendance_rate|round|int }}%</div>
+        <div class="stat-text">Attendance Rate</div>
+    </div>
+</div>
+
+<div class="filter-section">
+    <form method="GET" action="{{ url_for('attendance.student_attendance', student_id=student.StudentID) }}">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" value="{{ start_date }}" required>
+            </div>
+            <div class="filter-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" value="{{ end_date }}" required>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="action-buttons">
+    <a href="{{ url_for('view_student', student_id=student.StudentID) }}" class="btn">
+        <i class="fas fa-arrow-left"></i> Back to Student
+    </a>
+</div>
+
+{% if attendance_records %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Course</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in attendance_records %}
+        <tr>
+            <td>{{ record.AttendanceDate.strftime('%Y-%m-%d') }}</td>
+            <td>{{ record.CourseCode }} - {{ record.CourseName }}</td>
+            <td>
+                {% if record.IsPresent %}
+                <span class="attendance-present"><i class="fas fa-check"></i> Present</span>
+                {% else %}
+                <span class="attendance-absent"><i class="fas fa-times"></i> Absent</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-clipboard-check fa-4x"></i>
+    <h3>No Attendance Records</h3>
+    <p>There are no attendance records for this student in the selected date range.</p>
+</div>
+{% endif %}
+
+<style>
+    .attendance-stats {
+        margin: 30px 0;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .stat-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 20px;
+        text-align: center;
+        width: 200px;
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--dark-color);
+    }
+    
+    .stat-text {
+        color: var(--gray-color);
+        font-size: 1rem;
+    }
+    
+    .attendance-present {
+        color: var(--success-color);
+        font-weight: 600;
+    }
+    
+    .attendance-absent {
+        color: var(--danger-color);
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

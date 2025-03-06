@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Results - {{ exam.ExamName }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-chart-bar"></i> Exam Results</h1>
+
+<div class="course-details">
+    <h2>{{ exam.ExamName }} - {{ exam.CourseCode }}</h2>
+    <p><strong>Course:</strong> {{ exam.CourseName }}</p>
+    <p><strong>Date:</strong> {{ exam.ExamDate.strftime('%Y-%m-%d') }}</p>
+    <p><strong>Maximum Score:</strong> {{ exam.MaxScore }}</p>
+</div>
+
+{% if is_admin_or_staff %}
+<div class="action-buttons">
+    <a href="{{ url_for('exams.grade_exam', exam_id=exam.ExamID) }}" class="btn btn-primary">
+        <i class="fas fa-edit"></i> Edit Grades
+    </a>
+    <a href="{{ url_for('exams.course_exams', course_id=exam.CourseID) }}" class="btn">
+        <i class="fas fa-arrow-left"></i> Back to Exams
+    </a>
+</div>
+
+<div class="results-stats">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-number">{{ results|length }}</div>
+        <div class="stat-text">Students</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-calculator"></i>
+        </div>
+        <div class="stat-number">{{ avg_score|round(2) }}</div>
+        <div class="stat-text">Average Score</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+        <div class="stat-number">{{ max_score|round(2) }}</div>
+        <div class="stat-text">Highest Score</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-arrow-down"></i>
+        </div>
+        <div class="stat-number">{{ min_score|round(2) }}</div>
+        <div class="stat-text">Lowest Score</div>
+    </div>
+</div>
+{% endif %}
+
+{% if results %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.StudentID }}</td>
+            <td>{{ result.FirstName }} {{ result.LastName }}</td>
+            <td>{{ result.Score|round(2) }} / {{ exam.MaxScore }}</td>
+            <td>
+                <div class="score-bar-container">
+                    <div class="score-bar" style="width: {{ (result.Score / exam.MaxScore * 100)|round }}%;">
+                        {{ (result.Score / exam.MaxScore * 100)|round|int }}%
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-chart-bar fa-4x"></i>
+    <h3>No Results</h3>
+    <p>There are no exam results recorded yet.</p>
+    {% if is_admin_or_staff %}
+    <a href="{{ url_for('exams.grade_exam', exam_id=exam.ExamID) }}" class="btn btn-primary">
+        <i class="fas fa-star"></i> Record Grades
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<style>
+    .results-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .stat-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .stat-icon {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark-color);
+    }
+    
+    .stat-text {
+        color: var(--gray-color);
+        font-size: 0.9rem;
+    }
+    
+    .score-bar-container {
+        width: 100%;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .score-bar {
+        height: 24px;
+        background-color: var(--primary-color);
+        border-radius: 4px;
+        color: white;
+        text-align: right;
+        padding-right: 10px;
+        line-height: 24px;
+        transition: width 1s;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate score bars
+        const scoreBars = document.querySelectorAll('.score-bar');
+        scoreBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            
+            setTimeout(() => {
+                bar.style.width = width;
+            }, 100);
+        });
+    });
+</script>
+{% endblock %}

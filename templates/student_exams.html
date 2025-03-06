@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Results - {{ student.FirstName }} {{ student.LastName }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-chart-bar"></i> Exam Results</h1>
+
+<div class="student-details">
+    <h2>{{ student.FirstName }} {{ student.LastName }}</h2>
+    <p><strong>Email:</strong> {{ student.Email }}</p>
+    <p><strong>ID:</strong> {{ student.StudentID }}</p>
+</div>
+
+{% for course_id, course in results_by_course.items() %}
+<div class="course-section">
+    <h3>{{ course.CourseCode }}: {{ course.CourseName }}</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Exam</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in course.Results %}
+            <tr>
+                <td>{{ result.ExamName }}</td>
+                <td>{{ result.ExamDate.strftime('%Y-%m-%d') }}</td>
+                <td>{{ result.Score|round(2) }} / {{ result.MaxScore }}</td>
+                <td>
+                    <div class="score-bar-container">
+                        <div class="score-bar" style="width: {{ (result.Score / result.MaxScore * 100)|round }}%;">
+                            {{ (result.Score / result.MaxScore * 100)|round|int }}%
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endfor %}
+
+<style>
+    .course-section {
+        margin-bottom: 30px;
+    }
+    
+    .score-bar-container {
+        width: 100%;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .score-bar {
+        height: 24px;
+        background-color: var(--primary-color);
+        border-radius: 4px;
+        color: white;
+        text-align: right;
+        padding-right: 10px;
+        line-height: 24px;
+        transition: width 1s;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate score bars
+        const scoreBars = document.querySelectorAll('.score-bar');
+        scoreBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            
+            setTimeout(() => {
+                bar.style.width = width;
+            }, 100);
+        });
+    });
+</script>
+{% endblock %}

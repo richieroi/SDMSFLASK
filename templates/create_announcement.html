@@ -13,24 +13,39 @@
         </div>
         
         <div class="form-group">
-            <label for="target_role"><i class="fas fa-users"></i> Target Audience:</label>
-            <select id="target_role" name="target_role" required>
-                <option value="All">Everyone</option>
-                <option value="Students">Students Only</option>
-                <option value="Staff">Staff Only</option>
-                <option value="Admin">Administrators Only</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
             <label for="content"><i class="fas fa-file-alt"></i> Announcement Content:</label>
             <textarea id="content" name="content" rows="10" required></textarea>
         </div>
         
+        <div class="form-group">
+            <label for="expiry_date"><i class="fas fa-calendar-times"></i> Expiry Date (optional):</label>
+            <input type="date" id="expiry_date" name="expiry_date">
+            <div class="form-hint">Leave blank for no expiry date</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="course_id"><i class="fas fa-users"></i> Target Audience:</label>
+            <select id="course_id" name="course_id">
+                <option value="">All Users (General Announcement)</option>
+                {% for course in courses %}
+                <option value="{{ course.CourseID }}">{{ course.CourseCode }}: {{ course.CourseName }}</option>
+                {% endfor %}
+            </select>
+            <div class="form-hint">Select a specific course or "All Users" for a general announcement</div>
+        </div>
+        
         <div class="form-actions">
             <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Post Announcement</button>
-            <a href="{{ url_for('announcements.view_announcements') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
+            <a href="{{ url_for('announcements.announcements_home') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
         </div>
     </form>
 </div>
+
+<style>
+    .form-hint {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+</style>
 {% endblock %}

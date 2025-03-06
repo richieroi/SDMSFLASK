@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}New Academic Term - School Management System{% endblock %}
+{% block title %}Edit Academic Term - School Management System{% endblock %}
 
 {% block content %}
-<h1><i class="fas fa-calendar-plus"></i> {% if term %}Edit{% else %}Add{% endif %} Academic Term</h1>
+<h1><i class="fas fa-calendar-alt"></i> Edit Academic Term</h1>
 
 <div class="dashboard-header">
     <div class="dashboard-title">
-        <i class="fas fa-calendar-{% if term %}alt{% else %}plus{% endif %}"></i>
-        <h2>{% if term %}Edit{% else %}Create New{% endif %} Term</h2>
+        <i class="fas fa-calendar-alt"></i>
+        <h2>Edit Term</h2>
     </div>
 </div>
 
@@ -26,29 +26,24 @@
     <form method="POST">
         <div class="form-group">
             <label for="term_name"><i class="fas fa-signature"></i> Term Name:</label>
-            <input type="text" id="term_name" name="term_name" value="{{ term.TermName if term else '' }}" 
-                   required placeholder="e.g., Fall 2024">
+            <input type="text" id="term_name" name="term_name" value="{{ term.TermName }}" required>
             <div class="form-hint">Enter a descriptive name for the academic term.</div>
         </div>
         
         <div class="form-group">
             <label for="start_date"><i class="fas fa-calendar-day"></i> Start Date:</label>
-            <input type="date" id="start_date" name="start_date" 
-                   value="{{ term.StartDate.strftime('%Y-%m-%d') if term and term.StartDate else '' }}" required>
+            <input type="date" id="start_date" name="start_date" value="{{ term.StartDate.strftime('%Y-%m-%d') }}" required>
         </div>
         
         <div class="form-group">
             <label for="end_date"><i class="fas fa-calendar-day"></i> End Date:</label>
-            <input type="date" id="end_date" name="end_date" 
-                   value="{{ term.EndDate.strftime('%Y-%m-%d') if term and term.EndDate else '' }}" required>
+            <input type="date" id="end_date" name="end_date" value="{{ term.EndDate.strftime('%Y-%m-%d') }}" required>
             <div class="form-hint">End date must be after start date.</div>
         </div>
         
-        {% if term %}
         <div class="form-group">
             <label class="checkbox-container">Set as active term
-                <input type="checkbox" name="is_active" value="1" 
-                       {% if term.IsActive %}checked{% endif %} {% if term.IsActive %}disabled{% endif %}>
+                <input type="checkbox" name="is_active" value="1" {% if term.IsActive %}checked{% endif %} {% if term.IsActive %}disabled{% endif %}>
                 <span class="checkmark"></span>
             </label>
             <div class="form-hint">Only one term can be active at a time. Setting this term as active will deactivate all other terms.</div>
@@ -57,24 +52,10 @@
             <input type="hidden" name="is_active" value="1">
             {% endif %}
         </div>
-        {% else %}
-        <div class="form-group">
-            <label class="checkbox-container">Set as active term
-                <input type="checkbox" name="is_active" value="1">
-                <span class="checkmark"></span>
-            </label>
-            <div class="form-hint">Only one term can be active at a time. Setting this term as active will deactivate all other terms.</div>
-        </div>
-        {% endif %}
         
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-{% if term %}save{% else %}plus{% endif %}"></i> 
-                {% if term %}Update{% else %}Create{% endif %} Term
-            </button>
-            <a href="{{ url_for('calendar.manage_terms') }}" class="btn">
-                <i class="fas fa-times"></i> Cancel
-            </a>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Term</button>
+            <a href="{{ url_for('calendar.manage_terms') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>
         </div>
     </form>
 </div>
@@ -110,4 +91,14 @@
         });
     });
 </script>
+
+<style>
+    .form-note {
+        background-color: #e3f2fd;
+        padding: 10px;
+        border-radius: var(--border-radius);
+        margin-top: 10px;
+        border-left: 3px solid var(--primary-color);
+    }
+</style>
 {% endblock %}

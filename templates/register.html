@@ -3,167 +3,186 @@
 {% block title %}Register - School Management System{% endblock %}
 
 {% block content %}
-<div class="register-container">
-    <div class="register-logo">
-        <i class="fas fa-user-plus"></i>
-        <h1>Register for School Management System</h1>
-    </div>
-    
-    <form method="POST" action="{{ url_for('auth.register') }}">
-        <div class="form-group">
-            <label for="username"><i class="fas fa-user"></i> Username</label>
-            <input type="text" id="username" name="username" required autofocus>
+<div class="auth-wrapper">
+    <div class="auth-container register-container">
+        <div class="auth-image-side">
+            <div class="auth-quote">
+                <h2>"The beautiful thing about learning is that no one can take it away from you."</h2>
+                <p>- B.B. King</p>
+            </div>
         </div>
         
-        <div class="form-group">
-            <label for="email"><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="password"><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="password" name="password" required>
-            <div class="form-hint">Password must be at least 8 characters long</div>
-        </div>
-        
-        <div class="form-group">
-            <label for="confirm_password"><i class="fas fa-lock"></i> Confirm Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </div>
-        
-        <div class="form-actions">
-            <button type="submit" class="register-btn">
-                <i class="fas fa-user-plus"></i> Register
-            </button>
-        </div>
-    </form>
-    
-    <div class="register-links">
-        <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
-    </div>
+        <div class="auth-form-side">
+            <div class="auth-logo">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1>Create Account</h1>
+            <p class="auth-subtitle">Join our school management platform to get started</p>
+            
+            <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" required autofocus placeholder="Choose a username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Your email address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Create a password">
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <span class="strength-value"></span>
+                        </div>
+                        <div class="strength-text">Password must be at least 8 characters long</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+                </div>
+                
+                <div class="form-group terms-conditions">
+                    <label class="checkbox-container">I agree to the Terms and Privacy Policy
+                        <input type="checkbox" name="terms" required>
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                
+
+<!-- Find the submit button in your form and replace it with this improved version -->
+<div class="form-group">
+    <button type="submit" class="btn btn-primary btn-block">
+        <i class="fas fa-user-plus"></i> Create Account
+    </button>
 </div>
 
 <style>
-    .register-container {
-        width: 100%;
-        max-width: 400px;
-        padding: 30px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin: 50px auto;
-    }
-    body {
-        background-image: url("{{ url_for('static', filename='images/school.png') }}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-    .register-logo {
-        text-align: center;
-        margin-bottom: 25px;
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 4px;
+        transition: all 0.3s;
     }
     
-    .register-logo i {
-        font-size: 3rem;
-        color: var(--primary-color);
+    .btn-primary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    .register-logo h1 {
-        margin-top: 10px;
-        font-size: 1.8rem;
-        border-bottom: none;
-    }
-    
-    .form-group {
-        margin-bottom: 20px;
-    }
-    
-    .form-group label {
+    .btn-block {
         display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
-    
-    .form-group input {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-        transition: border-color 0.3s;
-    }
-    
-    .form-group input:focus {
-        border-color: var(--primary-color);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    }
-    
-    .form-hint {
-        font-size: 0.9rem;
-        color: var(--gray-color);
-        margin-top: 5px;
-    }
-    
-    .form-actions {
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .register-btn {
-        background-color: var(--primary-color);
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 500;
-        width: 100%;
-        transition: background-color 0.3s;
-    }
-    
-    .register-btn:hover {
-        background-color: var(--primary-dark);
-    }
-    
-    .register-links {
-        text-align: center;
-        margin-top: 20px;
-    }
-    
-    .register-links a {
-        color: var(--primary-color);
-        text-decoration: none;
-    }
-    
-    .register-links a:hover {
-        text-decoration: underline;
-    }
-    
-    .flash-container {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 500px;
-        z-index: 1000;
     }
 </style>
 
+            </form>
+            
+            <div class="auth-links">
+                <p>Already have an account? <a href="{{ url_for('auth.login') }}" class="auth-link">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+
 <script>
-    // Fade out flash messages after 5 seconds
-    setTimeout(function() {
-        const flashMessages = document.querySelectorAll('.flash-message');
-        flashMessages.forEach(message => {
-            message.style.opacity = '0';
-            message.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => message.remove(), 500);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password strength meter
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.querySelector('.strength-value');
+        const strengthText = document.querySelector('.strength-text');
+        
+        passwordInput.addEventListener('input', function() {
+            const value = this.value;
+            let strength = 0;
+            let message = 'Password must be at least 8 characters long';
+            
+            if (value.length >= 8) {
+                strength += 20;
+                
+                if (value.match(/[a-z]/g)) {
+                    strength += 20;
+                }
+                
+                if (value.match(/[A-Z]/g)) {
+                    strength += 20;
+                }
+                
+                if (value.match(/[0-9]/g)) {
+                    strength += 20;
+                }
+                
+                if (value.match(/[\W]/g)) {
+                    strength += 20;
+                }
+                
+                if (strength <= 40) {
+                    message = 'Weak password';
+                } else if (strength <= 80) {
+                    message = 'Medium strength password';
+                } else {
+                    message = 'Strong password';
+                }
+            }
+            
+            strengthBar.style.width = `${strength}%`;
+            strengthText.textContent = message;
         });
-    }, 5000);
+        
+        // Confirm password validation
+        const confirmInput = document.getElementById('confirm_password');
+        
+        confirmInput.addEventListener('input', function() {
+            if (this.value === passwordInput.value) {
+                this.style.borderColor = '#2ecc71';
+            } else {
+                this.style.borderColor = '#e74c3c';
+            }
+        });
+        
+        // Add focus animation
+        const inputs = document.querySelectorAll('.form-group input');
+        
+        inputs.forEach(input => {
+            // Check if the input has a value or is focused on page load
+            if (input.value !== '') {
+                input.parentElement.classList.add('focused');
+            }
+            
+            // Focus events
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+        
+        // Fade out flash messages after 5 seconds
+        setTimeout(function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-10px)';
+                message.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                setTimeout(() => message.remove(), 500);
+            });
+        }, 5000);
+    });
 </script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

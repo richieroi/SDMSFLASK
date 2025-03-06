@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Enroll Student - School Management System{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-user-plus"></i> Enroll Student in Course</h1>
+
+<div class="dashboard-header">
+    <div class="dashboard-title">
+        <i class="fas fa-user-graduate"></i>
+        <h2>Enroll {{ student.FirstName }} {{ student.LastName }}</h2>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('view_student', student_id=student.StudentID) }}" class="btn">
+            <i class="fas fa-arrow-left"></i> Back to Student Profile
+        </a>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="flash-message"><i class="fas fa-info-circle"></i> {{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class="student-info card">
+    <div class="card-header">
+        <i class="fas fa-id-card"></i>
+        <h3>Student Information</h3>
+    </div>
+    <div class="card-body">
+        <div class="detail-row">
+            <span class="detail-label">Student ID:</span>
+            <span class="detail-value">{{ student.StudentID }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Name:</span>
+            <span class="detail-value">{{ student.FirstName }} {{ student.LastName }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ student.Email }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Enrollment Date:</span>
+            <span class="detail-value">{{ student.EnrollmentDate.strftime('%Y-%m-%d') if student.EnrollmentDate else 'N/A' }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="enrollment-form card">
+    <div class="card-header">
+        <i class="fas fa-book"></i>
+        <h3>Select Course</h3>
+    </div>
+    <div class="card-body">
+        {% if available_courses %}
+            <form method="POST">
+                <div class="form-group">
+                    <label for="course_id"><i class="fas fa-book-reader"></i> Available Courses:</label>
+                    <select id="course_id" name="course_id" class="form-control" required>
+                        <option value="">-- Select a Course --</option>
+                        {% for course in available_courses %}
+                            <option value="{{ course.CourseID }}">{{ course.CourseCode }} - {{ course.CourseName }} ({{ course.Credits }} credits)</option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-hint">Select a course from the list to enroll the student</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Enroll Student
+                    </button>
+                    <a href="{{ url_for('view_student', student_id=student.StudentID) }}" class="btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-info-circle fa-2x"></i>
+                <p>No available courses found for enrollment. This student may already be enrolled in all available courses.</p>
+                <a href="{{ url_for('view_student', student_id=student.StudentID) }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Student Profile
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .student-info {
+        margin-bottom: 30px;
+    }
+    
+    .detail-row {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: bold;
+        width: 150px;
+        color: var(--dark-color);
+    }
+    
+    .detail-value {
+        flex: 1;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    
+    .form-hint {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 30px;
+        color: #666;
+    }
+    
+    .empty-state i {
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+</style>
+{% endblock %}

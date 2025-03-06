@@ -3,155 +3,399 @@
 {% block title %}Login - School Management System{% endblock %}
 
 {% block content %}
-<div class="login-container">
-    <div class="login-logo">
-        <i class="fas fa-graduation-cap"></i>
-        <h1>School Management System</h1>
-    </div>
-    
-    <form method="POST" action="{{ url_for('auth.login') }}">
-        <div class="form-group">
-            <label for="username"><i class="fas fa-user"></i> Username</label>
-            <input type="text" id="username" name="username" required autofocus>
+<div class="auth-wrapper">
+    <div class="auth-container login-container">
+        <div class="auth-form-side">
+            <div class="auth-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>Welcome Back</h1>
+            <p class="auth-subtitle">Log in to your account to access the School Management System</p>
+            
+            <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" required autofocus placeholder="Enter your username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <div class="form-group remember-me">
+                    <label class="checkbox-container">Remember me
+                        <input type="checkbox" name="remember">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="auth-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </div>
+            </form>
+            
+            <div class="auth-links">
+                <p>Don't have an account? <a href="{{ url_for('auth.register') }}" class="auth-link">Create Account</a></p>
+                <a href="#" class="auth-link forgot-password">Forgot password?</a>
+            </div>
         </div>
         
-        <div class="form-group">
-            <label for="password"><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="password" name="password" required>
+        <div class="auth-image-side">
+            <div class="auth-quote">
+                <h2>"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</h2>
+                <p>- Malcolm X</p>
+            </div>
         </div>
-        
-        <div class="form-actions">
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
-        </div>
-    </form>
-    
-    <div class="login-links">
-        <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
     </div>
 </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 
 <style>
-
-    body {
-        width: 100%;
-        max-width: 700px;
-        padding: 30px;
-        background: white;
-        border-radius: 50px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin: 50px auto;
-        background-image: url("{{ url_for('static', filename='images/school-bg.jpg') }}");
+    .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(41, 128, 185, 0.9), rgba(44, 62, 80, 0.9)), 
+                    url("{{ url_for('static', filename='images/school.png') }}");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
+        padding: 20px;
     }
-    .login-container{
-        
+
+    .auth-container {
+        width: 100%;
+        max-width: 1000px;
+        min-height: 600px;
+        display: flex;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        background: white;
     }
-    .login-logo {
+
+    .auth-form-side {
+        flex: 1;
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        background: white;
+    }
+
+    .auth-image-side {
+        flex: 1;
+        background: linear-gradient(135deg, #3498db, #2c3e50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-image-side::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("{{ url_for('static', filename='images/school.png') }}");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+    }
+
+    .auth-logo {
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
     }
-    
-    .login-logo i {
+
+    .auth-logo i {
         font-size: 3rem;
         color: var(--primary-color);
+        background: linear-gradient(135deg, #3498db, #2c3e50);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
-    
-    .login-logo h1 {
+
+    .auth-container h1 {
         margin-top: 10px;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #2c3e50;
         border-bottom: none;
+        margin-bottom: 10px;
+        text-align: left;
     }
-    
+
+    .auth-subtitle {
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        font-size: 1rem;
+    }
+
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        position: relative;
     }
-    
+
     .form-group label {
         display: block;
         margin-bottom: 8px;
         font-weight: 500;
-        color: white;
+        color: #34495e;
+        transition: all 0.3s;
     }
-    
+
     .form-group input {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        padding: 12px 15px;
+        border: 2px solid #ecf0f1;
+        border-radius: 8px;
         font-size: 1rem;
-        transition: border-color 0.3s;
+        transition: all 0.3s;
+        color: #2c3e50;
+        background: #f8f9fa;
     }
-    
+
     .form-group input:focus {
         border-color: var(--primary-color);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+        background: white;
     }
-    
+
+    .form-group input::placeholder {
+        color: #bdc3c7;
+    }
+
+    .remember-me {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        user-select: none;
+        font-size: 0.95rem;
+        color: #7f8c8d;
+    }
+
+    .checkbox-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark {
+        position: absolute;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #f8f9fa;
+        border: 2px solid #ecf0f1;
+        border-radius: 4px;
+    }
+
+    .checkbox-container:hover input ~ .checkmark {
+        background-color: #eef2f7;
+    }
+
+    .checkbox-container input:checked ~ .checkmark {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .checkbox-container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .checkbox-container .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
     .form-actions {
         margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
     }
-    
-    .login-btn {
-        background-color: var(--primary-color);
+
+    .auth-btn {
+        background: linear-gradient(135deg, #3498db, #2980b9);
         color: white;
         border: none;
-        padding: 12px;
-        border-radius: 4px;
+        padding: 14px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         width: 100%;
-        transition: background-color 0.3s;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
     }
-    
-    .login-btn:hover {
-        background-color: var(--primary-dark);
+
+    .auth-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        background: linear-gradient(135deg, #2980b9, #2c3e50);
     }
-    
-    .login-links {
+
+    .auth-btn:active {
+        transform: translateY(-1px);
+    }
+
+    .auth-links {
+        margin-top: auto;
         text-align: center;
-        margin-top: 20px;
+        color: #7f8c8d;
     }
-    
-    .login-links a {
+
+    .auth-link {
         color: var(--primary-color);
         text-decoration: none;
-    }
-    
-    .login-links a:hover {
-        text-decoration: underline;
-    }
-    
-    .flash-container {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 500px;
-        z-index: 1000;
+        font-weight: 600;
+        transition: color 0.3s;
     }
 
+    .auth-link:hover {
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
 
+    .forgot-password {
+        margin-top: 10px;
+        display: inline-block;
+        font-size: 0.9rem;
+    }
+
+    .auth-quote {
+        position: relative;
+        z-index: 1;
+        max-width: 85%;
+        text-align: center;
+    }
+
+    .auth-quote h2 {
+        font-size: 1.7rem;
+        font-weight: 500;
+        font-style: italic;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .auth-quote p {
+        text-align: right;
+        font-weight: 600;
+    }
+
+    @media (max-width: 992px) {
+        .auth-container {
+            flex-direction: column-reverse;
+            max-width: 600px;
+        }
+        
+        .auth-image-side {
+            min-height: 200px;
+            padding: 30px;
+        }
+        
+        .auth-form-side {
+            padding: 40px 30px;
+        }
+        
+        .auth-quote h2 {
+            font-size: 1.4rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .auth-wrapper {
+            padding: 10px;
+        }
+        
+        .auth-form-side {
+            padding: 30px 20px;
+        }
+        
+        .auth-image-side {
+            min-height: 150px;
+            padding: 20px;
+        }
+        
+        .auth-container h1 {
+            font-size: 1.8rem;
+        }
+        
+        .auth-subtitle {
+            margin-bottom: 20px;
+        }
+        
+        .auth-quote h2 {
+            font-size: 1.2rem;
+        }
+    }
 </style>
 
 <script>
-    // Fade out flash messages after 5 seconds
-    setTimeout(function() {
-        const flashMessages = document.querySelectorAll('.flash-message');
-        flashMessages.forEach(message => {
-            message.style.opacity = '0';
-            message.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => message.remove(), 500);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add focus animation
+        const inputs = document.querySelectorAll('.form-group input');
+        
+        inputs.forEach(input => {
+            // Check if the input has a value or is focused on page load
+            if (input.value !== '') {
+                input.parentElement.classList.add('focused');
+            }
+            
+            // Focus events
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
         });
-    }, 5000);
+        
+        // Fade out flash messages after 5 seconds
+        setTimeout(function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-10px)';
+                message.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                setTimeout(() => message.remove(), 500);
+            });
+        }, 5000);
+    });
 </script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

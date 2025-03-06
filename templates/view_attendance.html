@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Records - {{ course.CourseCode }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-clipboard-check"></i> Attendance Records</h1>
+
+<div class="course-details">
+    <h2>{{ course.CourseCode }}: {{ course.CourseName }}</h2>
+</div>
+
+<div class="filter-section">
+    <form method="GET" action="{{ url_for('attendance.view_attendance', course_id=course.CourseID) }}">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" value="{{ start_date }}" required>
+            </div>
+            <div class="filter-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" value="{{ end_date }}" required>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="action-buttons">
+    <a href="{{ url_for('attendance.take_attendance', course_id=course.CourseID) }}" class="btn btn-primary">
+        <i class="fas fa-user-check"></i> Take New Attendance
+    </a>
+    <a href="{{ url_for('view_course', course_id=course.CourseID) }}" class="btn">
+        <i class="fas fa-arrow-left"></i> Back to Course
+    </a>
+</div>
+
+{% if attendance_by_date %}
+    {% for date, records in attendance_by_date.items() %}
+    <div class="attendance-date-section">
+        <h3 class="attendance-date">{{ date }}</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.StudentID }}</td>
+                    <td>{{ record.FirstName }} {{ record.LastName }}</td>
+                    <td>
+                        {% if record.IsPresent %}
+                        <span class="attendance-present"><i class="fas fa-check"></i> Present</span>
+                        {% else %}
+                        <span class="attendance-absent"><i class="fas fa-times"></i> Absent</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-clipboard-check fa-4x"></i>
+    <h3>No Attendance Records</h3>
+    <p>There are no attendance records for this course in the selected date range.</p>
+    <a href="{{ url_for('attendance.take_attendance', course_id=course.CourseID) }}" class="btn btn-primary">
+        <i class="fas fa-user-check"></i> Take Attendance
+    </a>
+</div>
+{% endif %}
+
+<style>
+    .attendance-date-section {
+        margin-bottom: 30px;
+    }
+    
+    .attendance-date {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        margin-bottom: 10px;
+    }
+    
+    .attendance-present {
+        color: var(--success-color);
+        font-weight: 600;
+    }
+    
+    .attendance-absent {
+        color: var(--danger-color);
+        font-weight: 600;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        background-color: #f9f9f9;
+        border-radius: var(--border-radius);
+        margin-top: 20px;
+    }
+    
+    .empty-state i {
+        color: var(--gray-color);
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Grade Exam - {{ exam.ExamName }}{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-star"></i> Grade {{ exam.ExamName }}</h1>
+
+<div class="course-details">
+    <h2>{{ exam.CourseCode }}: {{ exam.CourseName }}</h2>
+    <p><strong>Exam Date:</strong> {{ exam.ExamDate.strftime('%Y-%m-%d') }}</p>
+    <p><strong>Maximum Score:</strong> {{ exam.MaxScore }}</p>
+    <p><strong>Weight:</strong> {{ exam.Weight }}%</p>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="flash-message"><i class="fas fa-info-circle"></i> {{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<div class="form">
+    <form method="POST">
+        <div class="student-scores">
+            <h3><i class="fas fa-users"></i> Students ({{ students|length }})</h3>
+            <p>Enter scores for each student:</p>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Score (max {{ exam.MaxScore }})</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.StudentID }}</td>
+                        <td>{{ student.FirstName }} {{ student.LastName }}</td>
+                        <td>
+                            <input type="number" 
+                                   name="score_{{ student.StudentID }}" 
+                                   min="0" 
+                                   max="{{ exam.MaxScore }}" 
+                                   step="0.01" 
+                                   value="{{ student.Score|default('', true) }}" 
+                                   class="score-input">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Scores</button>
+            <a href="{{ url_for('exams.course_exams', course_id=exam.CourseID) }}" class="btn"><i class="fas fa-arrow-left"></i> Back to Exams</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .score-input {
+        width: 80px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .score-input:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+</style>
+{% endblock %}

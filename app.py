@@ -12,10 +12,10 @@ from exams import exams_bp
 from analytics import analytics_bp
 from announcements import announcements_bp
 
-# Create Flask app with explicit static folder configuration
-app = Flask(__name__, static_folder='static', static_url_path='/static')
+app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = Config.SECRET_KEY
+
 # Register authentication blueprint
 app.register_blueprint(auth_bp, url_prefix='/auth')
 # Register new feature blueprints
