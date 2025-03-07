@@ -189,3 +189,20 @@ def register():
         return redirect(url_for('auth.login'))
     
     return render_template('register.html')
+
+@auth_bp.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    """Handle forgot password requests"""
+    if request.method == 'POST':
+        email = request.form.get('email')
+        
+        # Here you would typically:
+        # 1. Check if the email exists in your database
+        # 2. Generate a password reset token
+        # 3. Send an email with reset instructions
+        
+        # For now, just flash a message
+        flash('If your email exists in our system, you will receive password reset instructions shortly.')
+        return redirect(url_for('auth.login'))
+    
+    return render_template('forgot_password.html')
