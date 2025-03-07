@@ -4,106 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}School Management System{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    
+    <!-- Additional CSS -->
     {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <div class="container {% if session.user_role %}theme-{{ session.user_role|lower }}{% endif %}">
-        {% if session.user_id %}
-<nav class="navbar">
-    <div class="navbar-logo">
-        <i class="fas fa-graduation-cap"></i>
-        <span>School Management</span>
-    </div>
-    
-    <div class="navbar-toggle" id="navbarToggle">
-        <i class="fas fa-bars"></i>
-    </div>
-    
-    <div class="navbar-links" id="navbarLinks">
-        {% if session.user_role == 'Admin' %}
-            <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.path == url_for('admin_dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
+<body class="{% if session.user_role == 'Admin' %}theme-admin{% elif session.user_role == 'Staff' %}theme-staff{% elif session.user_role == 'Student' %}theme-student{% endif %}">
+    <!-- Navbar -->
+    {% if session.user_id %}
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>School Management</span>
+        </div>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="navbar-links" id="navbar-links">
+            <!-- Dynamic navigation based on user role -->
+            <a href="{{ url_for('index') }}" class="{{ 'active' if request.path == url_for('index') }}">
+                <i class="fas fa-home"></i> Home
             </a>
-            <a href="{{ url_for('students_list') }}" class="{{ 'active' if '/students' in request.path }}">
-                <i class="fas fa-users"></i> Students
+            
+            {% if session.user_role == 'Admin' %}
+                <a href="{{ url_for('manage_users') }}" class="{{ 'active' if 'users' in request.path }}">
+                    <i class="fas fa-users-cog"></i> Users
+                </a>
+                <a href="{{ url_for('view_audit_logs') }}" class="{{ 'active' if 'audit-logs' in request.path }}">
+                    <i class="fas fa-history"></i> Logs
+                </a>
+            {% endif %}
+            
+            <a href="{{ url_for('students_list') }}" class="{{ 'active' if 'students' in request.path }}">
+                <i class="fas fa-user-graduate"></i> Students
             </a>
-            <a href="{{ url_for('courses') }}" class="{{ 'active' if '/course' in request.path }}">
+            
+            <a href="{{ url_for('courses') }}" class="{{ 'active' if 'courses' in request.path }}">
                 <i class="fas fa-book"></i> Courses
             </a>
-            <a href="{{ url_for('view_audit_logs') }}" class="{{ 'active' if '/audit-logs' in request.path }}">
-                <i class="fas fa-history"></i> Logs
+            
+            <a href="{{ url_for('announcements.announcements_home') }}" class="{{ 'active' if 'announcements' in request.path }}">
+                <i class="fas fa-bullhorn"></i> Announcements
             </a>
-            <a href="{{ url_for('manage_users') }}" class="{{ 'active' if '/user' in request.path }}">
-                <i class="fas fa-users-cog"></i> Users
-            </a>
-        {% elif session.user_role == 'Staff' %}
-            <a href="{{ url_for('staff_dashboard') }}" class="{{ 'active' if request.path == url_for('staff_dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-            <a href="{{ url_for('students_list') }}" class="{{ 'active' if '/students' in request.path }}">
-                <i class="fas fa-users"></i> Students
-            </a>
-            <a href="{{ url_for('courses') }}" class="{{ 'active' if '/course' in request.path }}">
-                <i class="fas fa-book"></i> Courses
-            </a>
-            <a href="{{ url_for('attendance.take_attendance', course_id=1) }}" class="{{ 'active' if '/attendance' in request.path }}">
-                <i class="fas fa-clipboard-check"></i> Attendance
-            </a>
-        {% elif session.user_role == 'Student' %}
-            <a href="{{ url_for('student_dashboard') }}" class="{{ 'active' if request.path == url_for('student_dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-            <a href="{{ url_for('student_courses') }}" class="{{ 'active' if request.path == url_for('student_courses') }}">
-                <i class="fas fa-book"></i> My Courses
-            </a>
-            <a href="{{ url_for('browse_courses') }}" class="{{ 'active' if request.path == url_for('browse_courses') }}">
-                <i class="fas fa-search"></i> Browse Courses
-            </a>
-        {% endif %}
-    </div>
-    
-    <div class="navbar-user">
-        <div class="role-badge role-{{ session.user_role|lower }}">{{ session.user_role }}</div>
-        <div class="user-menu">
-            <span>{{ session.username }} <i class="fas fa-caret-down"></i></span>
-            <div class="user-menu-content">
-                <a href="{{ url_for('edit_profile') }}">
-                    <i class="fas fa-user-edit"></i> Edit Profile
+            
+            {% if session.user_role == 'Admin' or session.user_role == 'Staff' %}
+                <a href="{{ url_for('analytics.dashboard') }}" class="{{ 'active' if 'analytics' in request.path }}">
+                    <i class="fas fa-chart-bar"></i> Analytics
                 </a>
-                <a href="{{ url_for('change_password') }}">
-                    <i class="fas fa-key"></i> Change Password
-                </a>
-                <a href="{{ url_for('auth.logout') }}">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+            {% endif %}
+        </div>
+        <div class="navbar-user">
+            <span class="role-badge role-{{ session.user_role|lower }}">{{ session.user_role }}</span>
+            <div class="user-menu">
+                <span>
+                    <i class="fas fa-user-circle"></i>
+                    {{ session.username }}
+                    <i class="fas fa-chevron-down"></i>
+                </span>
+                <div class="user-menu-content">
+                    <a href="{{ url_for('edit_profile') }}">
+                        <i class="fas fa-user-edit"></i> Edit Profile
+                    </a>
+                    <a href="{{ url_for('change_password') }}">
+                        <i class="fas fa-key"></i> Change Password
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
-{% endif %}
-        
+    </nav>
+    {% endif %}
+    
+    <!-- Content -->
+    <div class="container" id="main-content">
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash-messages">
                     {% for message in messages %}
-                        <div class="flash-message"><i class="fas fa-info-circle"></i> {{ message }}</div>
+                        <div class="flash-message animate-fade-in" role="alert">
+                            <i class="fas fa-info-circle"></i>
+                            <span>{{ message }}</span>
+                            <button type="button" class="close-btn" onclick="this.parentElement.remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     {% endfor %}
                 </div>
             {% endif %}
         {% endwith %}
         
-        {% block content %}{% endblock %}
+        <!-- Main Content -->
+        <div class="content-wrapper animate-slide-up">
+            {% block content %}{% endblock %}
+        </div>
     </div>
     
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4 class="footer-heading">Quick Links</h4>
+                <div class="footer-links">
+                    {% if not session.user_id %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                    {% endif %}
+                    <a href="{{ url_for('about') }}">About Us</a>
+                    <a href="{{ url_for('contact') }}">Contact Us</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">Resources</h4>
+                <div class="footer-links">
+                    <a href="#">Documentation</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">Contact</h4>
+                <p><i class="fas fa-map-marker-alt"></i> 123 School Street</p>
+                <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                <p><i class="fas fa-envelope"></i> info@schoolsystem.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ now().year }} School Management System. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
     <script>
-        // Mobile navigation toggle
-        document.getElementById('navbarToggle').addEventListener('click', function() {
-            document.getElementById('navbarLinks').classList.toggle('show');
+        // Toggle navbar on mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const navbarLinks = document.getElementById('navbar-links');
+            
+            if (navbarToggle && navbarLinks) {
+                navbarToggle.addEventListener('click', function() {
+                    navbarLinks.classList.toggle('show');
+                });
+            }
+            
+            // Auto-dismiss flash messages
+            const flashMessages = document.querySelectorAll('.flash-message');
+            if (flashMessages.length > 0) {
+                setTimeout(function() {
+                    flashMessages.forEach(function(message) {
+                        message.classList.add('fade-out');
+                        setTimeout(function() {
+                            message.remove();
+                        }, 500);
+                    });
+                }, 5000);
+            }
         });
     </script>
+    
+    <!-- Additional JavaScript -->
     {% block extra_js %}{% endblock %}
 </body>
 </html>

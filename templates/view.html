@@ -21,8 +21,33 @@
 </div>
 
 <style>
+    /* General Styles */
+    :root {
+        --primary-color: #3498db;
+        --primary-dark: #2980b9;
+        --secondary-color: #2c3e50;
+        --gray-color: #7f8c8d;
+        --success-color: #2ecc71;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --border-radius: 8px;
+        --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body {
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        color: #333;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
     .detail-view {
         margin-top: 20px;
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 20px;
     }
     
     .detail-row {
@@ -38,11 +63,12 @@
     .detail-label {
         font-weight: bold;
         width: 150px;
-        color: var(--dark-color);
+        color: var(--secondary-color);
     }
     
     .detail-value {
         flex: 1;
+        color: var(--gray-color);
     }
 </style>
 {% endblock %}

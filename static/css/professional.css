@@ -1,0 +1,85 @@
+/* Global professional styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Georgia', serif;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.3s;
+}
+a:hover {
+    color: #2980b9;
+}
+
+/* Buttons */
+.btn, button {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.3s;
+}
+.btn-primary {
+    background-color: #3498db;
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Footer styling matching landing page */
+.professional-footer {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 40px 20px;
+    text-align: center;
+}
+.professional-footer a {
+    color: #ecf0f1;
+    margin: 0 15px;
+    font-weight: 600;
+}
+
+/* Animation utilities */
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out forwards;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Additional refined spacing */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Animation for page transitions */
+.slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+}
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

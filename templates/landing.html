@@ -4,9 +4,21 @@
 
 {% block content %}
 <div class="landing-container">
+    <header class="landing-header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>School Management</span>
+        </div>
+        <nav class="top-nav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            <a href="{{ url_for('auth.login') }}">Login</a>
+        </nav>
+    </header>
     <div class="landing-hero">
         <div class="hero-content">
-            <h1>School Management System</h1>
+            <h1 class="hero-title">School Management System</h1>
             <p>A comprehensive platform for managing your educational institution</p>
             <div class="hero-buttons">
                 <a href="{{ url_for('auth.login') }}" class="hero-btn primary-btn">
@@ -19,7 +31,46 @@
         </div>
     </div>
     
-    <div class="landing-section">
+    <div class="landing-section features">
+        <div class="section-header">
+            <h2>Key Features</h2>
+            <p>Explore the powerful features that make our platform the best choice for your school</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-users feature-icon"></i>
+                <h3>User-Friendly Interface</h3>
+                <p>Intuitive design for easy navigation and a seamless user experience.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-graduation-cap feature-icon"></i>
+                <h3>Student Information Management</h3>
+                <p>Easily manage student records, attendance, and performance.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-book feature-icon"></i>
+                <h3>Course Management</h3>
+                <p>Organize courses, assignments, and resources in one central location.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-calendar-alt feature-icon"></i>
+                <h3>Scheduling Tools</h3>
+                <p>Efficiently schedule classes, events, and meetings.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-bar feature-icon"></i>
+                <h3>Reporting and Analytics</h3>
+                <p>Generate insightful reports to track progress and make data-driven decisions.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-comments feature-icon"></i>
+                <h3>Communication Hub</h3>
+                <p>Facilitate communication between teachers, students, and parents.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="landing-section why-choose">
         <div class="section-header">
             <h2>Why Choose Our Platform?</h2>
             <p>Our school management system offers everything you need to streamline educational processes</p>
@@ -113,54 +164,81 @@
             </a>
         </div>
     </div>
-    
-    <div class="footer">
-        <p>&copy; {{ current_year }} School Management System | All Rights Reserved</p>
-    </div>
-</div>
+    <!-- Replace existing footer with vertical block structure -->
 
+<!-- Snowfall animation container -->
+<div class="snowflakes" aria-hidden="true">
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+</div>
 <style>
-    .landing-container {
-        padding: 0;
-        margin: 0;
+    /* General Styles */
+    :root {
+        --primary-color: #3498db;
+        --primary-dark: #2980b9;
+        --secondary-color: #2c3e50;
+        --gray-color: #7f8c8d;
+        --success-color: #2ecc71;
+        --warning-color: #f39c12;
+        --border-radius: 8px;
+        --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body {
         font-family: 'Segoe UI', Roboto, Arial, sans-serif;
         color: #333;
         background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
     }
-    
+
+    /* Hero Section */
     .landing-hero {
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(44, 62, 80, 0.9)), 
+        background: linear-gradient(rgba(52, 152, 219, 0.7), rgba(44, 62, 80, 0.7)), 
                     url("{{ url_for('static', filename='images/school.png') }}");
         background-size: cover;
         background-position: center;
         color: white;
-        padding: 100px 0;
+        padding: 150px 20px;
         text-align: center;
+        position: relative;
+        overflow: hidden;
     }
-    
+
     .hero-content {
         max-width: 800px;
         margin: 0 auto;
+        position: relative;
+        z-index: 2;
     }
-    
-    .landing-hero h1 {
-        font-size: 3rem;
+
+    .hero-title {
+        font-size: 3.5rem;
         font-weight: 700;
         margin-bottom: 20px;
         border-bottom: none;
+        animation: fadeInUp 1s ease-out;
     }
-    
+
     .landing-hero p {
         font-size: 1.5rem;
         margin-bottom: 40px;
+        animation: fadeInUp 1.2s ease-out;
     }
-    
+
+    /* Buttons */
     .hero-buttons {
         display: flex;
         justify-content: center;
         gap: 20px;
+        animation: fadeInUp 1.4s ease-out;
     }
-    
+
     .hero-btn {
         display: inline-block;
         padding: 15px 30px;
@@ -170,199 +248,378 @@
         text-decoration: none;
         transition: all 0.3s ease;
     }
-    
+
     .primary-btn {
-        background-color: #3498db;
+        background-color: var(--primary-color);
         color: white;
     }
-    
+
     .primary-btn:hover {
-        background-color: #2980b9;
+        background-color: var(--primary-dark);
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         color: white;
         text-decoration: none;
     }
-    
+
     .secondary-btn {
         background-color: white;
-        color: #3498db;
+        color: var(--primary-color);
     }
-    
+
     .secondary-btn:hover {
         background-color: #f8f9fa;
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        color: #2980b9;
+        color: var(--primary-dark);
         text-decoration: none;
     }
-    
+
+    /* Sections */
     .landing-section {
         padding: 80px 20px;
         max-width: 1200px;
         margin: 0 auto;
     }
-    
+
     .section-header {
         text-align: center;
         margin-bottom: 60px;
     }
-    
+
     .section-header h2 {
         font-size: 2.5rem;
         margin-bottom: 15px;
-        color: #2c3e50;
+        color: var(--secondary-color);
     }
-    
+
     .section-header p {
         font-size: 1.2rem;
-        color: #7f8c8d;
+        color: var(--gray-color);
         max-width: 700px;
         margin: 0 auto;
     }
-    
+
+    /* Features Grid */
     .features-grid {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
     }
-    
-    .row {
-        display: flex;
-        gap: 30px;
-    }
-    
+
     .feature-card {
-        flex: 1;
         background-color: white;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         padding: 30px;
         text-align: center;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--box-shadow);
         transition: all 0.3s ease;
     }
-    
+
     .feature-card:hover {
         transform: translateY(-10px);
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
-    
+
     .feature-icon {
         font-size: 3rem;
-        color: #3498db;
+        color: var(--primary-color);
         margin-bottom: 20px;
+        transition: transform 0.5s ease-in-out;
     }
-    
+
+    .feature-card:hover .feature-icon {
+        transform: rotate(360deg);
+    }
+
     .feature-card h3 {
         font-size: 1.5rem;
         margin-bottom: 15px;
-        color: #2c3e50;
+        color: var(--secondary-color);
     }
-    
+
     .feature-card p {
-        color: #7f8c8d;
+        color: var(--gray-color);
     }
-    
+
+    /* Testimonials */
     .testimonials {
         background-color: #f1f5f9;
     }
-    
+
     .testimonials-grid {
         display: flex;
         flex-wrap: wrap;
         gap: 30px;
         justify-content: center;
     }
-    
+
     .testimonial-card {
         background-color: white;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         padding: 30px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--box-shadow);
         width: calc(33.333% - 20px);
         min-width: 300px;
     }
-    
+
     .testimonial-card .quote {
         font-style: italic;
         margin-bottom: 15px;
         color: #34495e;
         line-height: 1.6;
     }
-    
+
     .testimonial-card .author {
         text-align: right;
         font-weight: 600;
-        color: #7f8c8d;
+        color: var(--gray-color);
     }
-    
+
+    /* CTA Section */
     .cta {
         background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(44, 62, 80, 0.9));
-        margin: 0 auto;
-        max-width: 100%;
-        width: 100%;
         color: white;
         text-align: center;
         padding: 100px 20px;
     }
-    
+
     .cta-content {
         max-width: 800px;
         margin: 0 auto;
     }
-    
+
     .cta h2 {
         font-size: 2.5rem;
         margin-bottom: 20px;
         color: white;
     }
-    
+
     .cta p {
         font-size: 1.2rem;
         margin-bottom: 30px;
         color: rgba(255, 255, 255, 0.9);
     }
-    
+
+    /* Footer */
     .footer {
-        background-color: #2c3e50;
+        background-color: var(--secondary-color);
         color: white;
         text-align: center;
         padding: 30px;
         margin-top: 0;
     }
-    
-    /* Responsive design */
+
+    /* Responsive Design */
     @media (max-width: 992px) {
         .row {
             flex-direction: column;
         }
-        
+
         .testimonial-card {
             width: 100%;
             margin-bottom: 20px;
         }
-        
+
         .landing-hero h1 {
             font-size: 2.5rem;
         }
-        
+
         .landing-hero p {
             font-size: 1.2rem;
         }
     }
-    
+
     @media (max-width: 576px) {
         .hero-buttons {
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .landing-hero h1 {
             font-size: 2rem;
         }
-        
+
         .section-header h2 {
             font-size: 2rem;
+        }
+    }
+
+    /* Snowfall Animation */
+    .snowflakes {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10%;
+        font-size: 1.5rem;
+        color: #fff;
+        user-select: none;
+        opacity: 0.8;
+        animation-name: fall;
+        animation-duration: 10s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        100% {
+            transform: translateY(110vh) rotate(360deg);
+        }
+    }
+
+    /* Randomize snowflake positions and delays */
+    .snowflake:nth-child(1) {
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .snowflake:nth-child(2) {
+        left: 30%;
+        animation-delay: 2s;
+    }
+
+    .snowflake:nth-child(3) {
+        left: 50%;
+        animation-delay: 4s;
+    }
+
+    .snowflake:nth-child(4) {
+        left: 70%;
+        animation-delay: 1s;
+    }
+
+    .snowflake:nth-child(5) {
+        left: 90%;
+        animation-delay: 3s;
+    }
+
+    .snowflake:nth-child(6) {
+        left: 25%;
+        animation-delay: 5s;
+    }
+
+    /* Top header styling */
+    .landing-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: var(--secondary-color);
+        color: #ecf0f1;
+    }
+
+    .landing-header .logo {
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .landing-header .top-nav a {
+        margin: 0 10px;
+        color: #ecf0f1;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .landing-header .top-nav a:hover {
+        text-decoration: underline;
+    }
+
+    /* Footer vertical blocks */
+    .professional-footer .footer-blocks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 20px;
+    }
+
+    .professional-footer .footer-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .professional-footer .footer-block h4 {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .professional-footer .footer-block a,
+    .professional-footer .footer-block p {
+        margin: 3px 0;
+        color: #ecf0f1;
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Features Section Styling */
+    .landing-section.features {
+        background-color: #fff;
+        padding: 60px 20px;
+    }
+
+    .landing-section.features .section-header {
+        margin-bottom: 40px;
+    }
+
+    .landing-section.features .section-header h2 {
+        font-size: 2.2rem;
+        color: #333;
+    }
+
+    .landing-section.features .section-header p {
+        color: #777;
+    }
+
+    .why-choose .features-grid .row {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        justify-content: space-around; /* Distribute cards evenly */
+        flex-wrap: wrap; /* Allow cards to wrap to the next row */
+    }
+
+    .why-choose .features-grid .feature-card {
+        width: calc(33% - 15px); /* Adjust width for 3 cards in a row */
+        min-width: 250px; /* Minimum width for smaller screens */
+        box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        margin-bottom: 20px; /* Add margin to separate cards vertically */
+    }
+
+    @media (max-width: 768px) {
+        .why-choose .features-grid .feature-card {
+            width: calc(50% - 10px); /* Two cards in a row on medium screens */
+        }
+    }
+
+    @media (max-width: 576px) {
+        .why-choose .features-grid .feature-card {
+            width: 100%; /* One card in a row on small screens */
         }
     }
 </style>

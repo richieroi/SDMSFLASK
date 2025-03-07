@@ -5,37 +5,199 @@
 {% block content %}
 <h1><i class="fas fa-user-cog"></i> {{ title }}</h1>
 
-<form method="POST" action="{{ action_url }}" class="form">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" value="{{ user.UserName if user else '' }}" required>
+<div class="content-container">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas {% if user %}fa-edit{% else %}fa-user-plus{% endif %}"></i>
+            <h3>{{ title }}</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ action_url }}" class="user-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" name="username" value="{{ user.UserName if user else '' }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" value="{{ user.Email if user else '' }}" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-tag"></i>
+                            <select id="role" name="role" class="form-control" required>
+                                {% for role in roles %}
+                                <option value="{{ role }}" {% if user and user.RoleName == role %}selected{% endif %}>{{ role }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password {% if user %}(optional){% endif %}</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" {% if not user %}required{% endif %}>
+                        </div>
+                        {% if user %}
+                        <div class="form-hint">Leave blank to keep the current password.</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas {% if user %}fa-save{% else %}fa-user-plus{% endif %}"></i> {{ submit_text }}
+                    </button>
+                    <a href="{{ url_for('manage_users') }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+
+<style>
+    .content-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
     
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="{{ user.Email if user else '' }}" required>
-    </div>
+    .card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
     
-    <div class="form-group">
-        <label for="role">Role</label>
-        <select id="role" name="role" class="form-control" required>
-            {% for role in roles %}
-            <option value="{{ role }}" {% if user and user.RoleName == role %}selected{% endif %}>{{ role }}</option>
-            {% endfor %}
-        </select>
-    </div>
+    .card-header {
+        background: linear-gradient(135deg, #3498db, #2c3e50);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
     
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" {% if not user %}required{% endif %}>
-        {% if user %}
-        <small class="form-text text-muted">Leave blank to keep the current password.</small>
-        {% endif %}
-    </div>
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
     
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
-        <a href="{{ url_for('manage_users') }}" class="btn">Cancel</a>
-    </div>
-</form>
+    .card-body {
+        padding: 30px;
+    }
+    
+    .user-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .form-group {
+        margin-bottom: 5px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .input-with-icon {
+        position: relative;
+    }
+    
+    .input-with-icon i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+    }
+    
+    .input-with-icon input,
+    .input-with-icon select {
+        width: 100%;
+        padding: 12px 15px 12px 40px;
+        border: 2px solid #ecf0f1;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .input-with-icon input:focus,
+    .input-with-icon select:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .form-hint {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+        padding-top: 20px;
+        border-top: 1px solid #ecf0f1;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+        background-color: #ecf0f1;
+        color: #7f8c8d;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #bdc3c7;
+        color: #2c3e50;
+    }
+</style>
 {% endblock %}

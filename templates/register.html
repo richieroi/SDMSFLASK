@@ -19,137 +19,444 @@
             <h1>Create Account</h1>
             <p class="auth-subtitle">Join our school management platform to get started</p>
             
-            <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+            <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form" id="registerForm">
+                <!-- Flash messages container for form errors -->
+                <div class="form-messages"></div>
+                
                 <div class="form-group">
                     <label for="username"><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="username" name="username" required autofocus placeholder="Choose a username">
+                    <input type="text" id="username" name="username" required autofocus placeholder="Choose a username" aria-describedby="usernameHelp">
+                    <small id="usernameHelp" class="form-text">Username must be at least 4 characters</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="email" name="email" required placeholder="Your email address">
+                    <input type="email" id="email" name="email" required placeholder="Your email address" aria-describedby="emailHelp">
+                    <small id="emailHelp" class="form-text">We'll never share your email</small>
                 </div>
                 
                 <div class="form-group">
                     <label for="password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="password" name="password" required placeholder="Create a password">
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" required placeholder="Create a password" aria-describedby="passwordHelp">
+                        <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
                     <div class="password-strength">
                         <div class="strength-bar">
                             <span class="strength-value"></span>
                         </div>
                         <div class="strength-text">Password must be at least 8 characters long</div>
                     </div>
+                    <div class="password-requirements">
+                        <p>Password requirements:</p>
+                        <ul>
+                            <li id="req-length"><i class="far fa-circle"></i> At least 8 characters</li>
+                            <li id="req-lowercase"><i class="far fa-circle"></i> One lowercase letter</li>
+                            <li id="req-uppercase"><i class="far fa-circle"></i> One uppercase letter</li>
+                            <li id="req-number"><i class="far fa-circle"></i> One number</li>
+                            <li id="req-special"><i class="far fa-circle"></i> One special character</li>
+                        </ul>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="confirm_password"><i class="fas fa-lock"></i> Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+                    <div class="password-input-container">
+                        <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+                        <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    <small id="passwordMatch" class="form-text"></small>
                 </div>
                 
                 <div class="form-group terms-conditions">
-                    <label class="checkbox-container">I agree to the Terms and Privacy Policy
+                    <label class="checkbox-container">I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
                         <input type="checkbox" name="terms" required>
                         <span class="checkmark"></span>
                     </label>
                 </div>
                 
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block" id="registerButton">
+                        <i class="fas fa-user-plus"></i> Create Account
+                        <span class="spinner"><i class="fas fa-circle-notch fa-spin"></i></span>
+                    </button>
+                </div>
 
-<!-- Find the submit button in your form and replace it with this improved version -->
-<div class="form-group">
-    <button type="submit" class="btn btn-primary btn-block">
-        <i class="fas fa-user-plus"></i> Create Account
-    </button>
-</div>
+                <div class="social-auth-divider">
+                    <span>OR REGISTER WITH</span>
+                </div>
+                
+                <div class="social-auth-buttons">
+                    <button type="button" class="social-btn google">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button type="button" class="social-btn facebook">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                </div>
 
-<style>
-    .btn-primary {
-        background-color: #3498db;
-        border-color: #3498db;
-        padding: 12px;
-        font-size: 16px;
-        font-weight: 600;
-        border-radius: 4px;
-        transition: all 0.3s;
-    }
-    
-    .btn-primary:hover {
-        background-color: #2980b9;
-        border-color: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn-block {
-        display: block;
-        width: 100%;
-    }
-</style>
+                <style>
+                    .btn-primary {
+                        background-color: #3498db;
+                        border-color: #3498db;
+                        padding: 12px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        border-radius: 4px;
+                        transition: all 0.3s;
+                        position: relative;
+                    }
+                    
+                    .btn-primary:hover {
+                        background-color: #2980b9;
+                        border-color: #2980b9;
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .btn-block {
+                        display: block;
+                        width: 100%;
+                    }
 
+                    .spinner {
+                        display: none;
+                        margin-left: 10px;
+                    }
+                    
+                    .btn-primary.loading .spinner {
+                        display: inline-block;
+                    }
+                    
+                    .form-text {
+                        font-size: 0.8rem;
+                        color: #7f8c8d;
+                        margin-top: 5px;
+                    }
+                    
+                    .password-requirements {
+                        margin-top: 10px;
+                        font-size: 0.9rem;
+                    }
+                    
+                    .password-requirements p {
+                        margin-bottom: 5px;
+                        color: #7f8c8d;
+                    }
+                    
+                    .password-requirements ul {
+                        list-style: none;
+                        padding-left: 5px;
+                    }
+                    
+                    .password-requirements li {
+                        margin-bottom: 3px;
+                        color: #7f8c8d;
+                    }
+                    
+                    .password-requirements li i {
+                        margin-right: 5px;
+                    }
+                    
+                    .password-requirements li.valid {
+                        color: #2ecc71;
+                    }
+                    
+                    .password-requirements li.valid i {
+                        color: #2ecc71;
+                    }
+                    
+                    .password-input-container {
+                        position: relative;
+                    }
+                    
+                    .password-toggle {
+                        position: absolute;
+                        right: 10px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        color: #7f8c8d;
+                    }
+                    
+                    .social-auth-divider {
+                        text-align: center;
+                        margin: 20px 0;
+                        position: relative;
+                    }
+                    
+                    .social-auth-divider:before {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        right: 0;
+                        height: 1px;
+                        background: #e0e0e0;
+                    }
+                    
+                    .social-auth-divider span {
+                        position: relative;
+                        background: white;
+                        padding: 0 15px;
+                        font-size: 0.8rem;
+                        color: #7f8c8d;
+                    }
+                    
+                    .social-auth-buttons {
+                        display: flex;
+                        gap: 10px;
+                    }
+                    
+                    .social-btn {
+                        flex: 1;
+                        padding: 10px;
+                        border: none;
+                        border-radius: 4px;
+                        font-weight: 600;
+                        font-size: 14px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                    }
+                    
+                    .social-btn.google {
+                        background-color: #ffffff;
+                        color: #333;
+                        border: 1px solid #e0e0e0;
+                    }
+                    
+                    .social-btn.facebook {
+                        background-color: #3b5998;
+                        color: white;
+                    }
+                    
+                    .social-btn:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .form-messages {
+                        margin-bottom: 15px;
+                    }
+                    
+                    .form-message {
+                        padding: 10px;
+                        border-radius: 4px;
+                        margin-bottom: 10px;
+                        animation: fadeIn 0.5s;
+                    }
+                    
+                    .form-message.error {
+                        background-color: #ffeaa7;
+                        color: #d35400;
+                        border-left: 4px solid #e74c3c;
+                    }
+                    
+                    .form-message.success {
+                        background-color: #e0f7fa;
+                        color: #00897b;
+                        border-left: 4px solid #2ecc71;
+                    }
+                    
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(-10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                </style>
             </form>
             
             <div class="auth-links">
                 <p>Already have an account? <a href="{{ url_for('auth.login') }}" class="auth-link">Sign In</a></p>
+                <p><a href="{{ url_for('index') }}" class="auth-link"><i class="fas fa-home"></i> Back to Home</a></p>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Include professional stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/professional.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Password strength meter
+        // Trigger confetti on successful page load for visual appeal
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+
+        // Password strength meter and requirements validation
         const passwordInput = document.getElementById('password');
         const strengthBar = document.querySelector('.strength-value');
         const strengthText = document.querySelector('.strength-text');
+        const confirmInput = document.getElementById('confirm_password');
+        const passwordMatch = document.getElementById('passwordMatch');
+        
+        // Password requirements elements
+        const reqLength = document.getElementById('req-length');
+        const reqLowercase = document.getElementById('req-lowercase');
+        const reqUppercase = document.getElementById('req-uppercase');
+        const reqNumber = document.getElementById('req-number');
+        const reqSpecial = document.getElementById('req-special');
         
         passwordInput.addEventListener('input', function() {
             const value = this.value;
             let strength = 0;
             let message = 'Password must be at least 8 characters long';
             
+            // Check length requirement
             if (value.length >= 8) {
                 strength += 20;
-                
-                if (value.match(/[a-z]/g)) {
-                    strength += 20;
-                }
-                
-                if (value.match(/[A-Z]/g)) {
-                    strength += 20;
-                }
-                
-                if (value.match(/[0-9]/g)) {
-                    strength += 20;
-                }
-                
-                if (value.match(/[\W]/g)) {
-                    strength += 20;
-                }
-                
-                if (strength <= 40) {
-                    message = 'Weak password';
-                } else if (strength <= 80) {
-                    message = 'Medium strength password';
-                } else {
-                    message = 'Strong password';
-                }
+                reqLength.classList.add('valid');
+                reqLength.innerHTML = '<i class="fas fa-check-circle"></i> At least 8 characters';
+            } else {
+                reqLength.classList.remove('valid');
+                reqLength.innerHTML = '<i class="far fa-circle"></i> At least 8 characters';
+            }
+            
+            // Check lowercase letter requirement
+            if (value.match(/[a-z]/g)) {
+                strength += 20;
+                reqLowercase.classList.add('valid');
+                reqLowercase.innerHTML = '<i class="fas fa-check-circle"></i> One lowercase letter';
+            } else {
+                reqLowercase.classList.remove('valid');
+                reqLowercase.innerHTML = '<i class="far fa-circle"></i> One lowercase letter';
+            }
+            
+            // Check uppercase letter requirement
+            if (value.match(/[A-Z]/g)) {
+                strength += 20;
+                reqUppercase.classList.add('valid');
+                reqUppercase.innerHTML = '<i class="fas fa-check-circle"></i> One uppercase letter';
+            } else {
+                reqUppercase.classList.remove('valid');
+                reqUppercase.innerHTML = '<i class="far fa-circle"></i> One uppercase letter';
+            }
+            
+            // Check number requirement
+            if (value.match(/[0-9]/g)) {
+                strength += 20;
+                reqNumber.classList.add('valid');
+                reqNumber.innerHTML = '<i class="fas fa-check-circle"></i> One number';
+            } else {
+                reqNumber.classList.remove('valid');
+                reqNumber.innerHTML = '<i class="far fa-circle"></i> One number';
+            }
+            
+            // Check special character requirement
+            if (value.match(/[\W]/g)) {
+                strength += 20;
+                reqSpecial.classList.add('valid');
+                reqSpecial.innerHTML = '<i class="fas fa-check-circle"></i> One special character';
+            } else {
+                reqSpecial.classList.remove('valid');
+                reqSpecial.innerHTML = '<i class="far fa-circle"></i> One special character';
+            }
+            
+            // Set strength color
+            let strengthColor = '#e74c3c';
+            if (strength <= 40) {
+                message = 'Weak password';
+            } else if (strength <= 80) {
+                message = 'Medium strength password';
+                strengthColor = '#f39c12';
+            } else {
+                message = 'Strong password';
+                strengthColor = '#2ecc71';
             }
             
             strengthBar.style.width = `${strength}%`;
+            strengthBar.style.backgroundColor = strengthColor;
             strengthText.textContent = message;
+            
+            // Check if passwords match
+            validatePasswordMatch();
+        });
+        
+        // Password toggle visibility
+        const toggleButtons = document.querySelectorAll('.password-toggle');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
         });
         
         // Confirm password validation
-        const confirmInput = document.getElementById('confirm_password');
+        confirmInput.addEventListener('input', validatePasswordMatch);
         
-        confirmInput.addEventListener('input', function() {
-            if (this.value === passwordInput.value) {
-                this.style.borderColor = '#2ecc71';
-            } else {
-                this.style.borderColor = '#e74c3c';
+        function validatePasswordMatch() {
+            if (confirmInput.value === '') {
+                passwordMatch.textContent = '';
+                confirmInput.style.borderColor = '';
+                return;
             }
+            
+            if (confirmInput.value === passwordInput.value) {
+                passwordMatch.textContent = 'Passwords match';
+                passwordMatch.style.color = '#2ecc71';
+                confirmInput.style.borderColor = '#2ecc71';
+            } else {
+                passwordMatch.textContent = 'Passwords do not match';
+                passwordMatch.style.color = '#e74c3c';
+                confirmInput.style.borderColor = '#e74c3c';
+            }
+        }
+        
+        // Form submission with loading animation
+        const form = document.getElementById('registerForm');
+        const submitButton = document.getElementById('registerButton');
+        const messagesContainer = document.querySelector('.form-messages');
+        
+        form.addEventListener('submit', function(e) {
+            // For demo purposes, prevent actual submission and show loading animation
+            if (confirmInput.value !== passwordInput.value) {
+                e.preventDefault();
+                showMessage('Passwords do not match. Please try again.', 'error');
+                return;
+            }
+            
+            submitButton.classList.add('loading');
+            // In a real implementation, you would handle the form submission with AJAX
+            // and only show the success message after successful server response
         });
+        
+        function showMessage(message, type) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('form-message', type);
+            messageElement.textContent = message;
+            
+            messagesContainer.appendChild(messageElement);
+            
+            setTimeout(() => {
+                messageElement.style.opacity = '0';
+                messageElement.style.transform = 'translateY(-10px)';
+                setTimeout(() => messageElement.remove(), 500);
+            }, 5000);
+        }
         
         // Add focus animation
         const inputs = document.querySelectorAll('.form-group input');

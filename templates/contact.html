@@ -1,0 +1,555 @@
+{% extends "base.html" %}
+{% block title %}Contact Us - School Management System{% endblock %}
+{% block content %}
+<div class="contact-container">
+    <!-- Hero Section -->
+    <div class="contact-hero">
+        <div class="hero-overlay">
+            <h1>Contact Us</h1>
+            <p class="tagline">We'd love to hear from you</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="navigation-links">
+            <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a>
+            <a href="{{ url_for('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+        </div>
+        <div class="contact-grid">
+            <!-- Contact Information Column -->
+            <div class="contact-info-column">
+                <div class="info-card">
+                    <h2>Get In Touch</h2>
+                    <p>Have questions about our School Management System? We're here to help you find the right solutions for your educational institution.</p>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Address</h3>
+                            <p>123 School Street<br>Education City, EC 10001</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p><a href="mailto:info@schoolsystem.com">info@schoolsystem.com</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h3>Phone</h3>
+                            <p>(555) 123-4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Business Hours</h3>
+                            <p>Monday - Friday: 9:00 AM - 5:00 PM<br>Saturday & Sunday: Closed</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Map -->
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2989.750159767374!2d-70.6572892!3d41.5019149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDMwJzA2LjkiTiA3MMKwMzknMjYuMiJX!5e0!3m2!1sen!2sus!4v1633624416356!5m2!1sen!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+            
+            <!-- Contact Form Column -->
+            <div class="contact-form-column">
+                <div class="form-card">
+                    <h2>Send Us a Message</h2>
+                    <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+                    
+                    <form action="/submit_contact" method="post" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" required placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Enter subject">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="6" required placeholder="How can we help you?"></textarea>
+                        </div>
+                        
+                        <div class="form-group form-check">
+                            <label class="checkbox-container">
+                                I agree to the privacy policy
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQs Section -->
+<div class="faq-section">
+    <div class="container">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3>What support options are available?</h3>
+                <p>We offer 24/7 email support, phone support during business hours, and comprehensive documentation for all our products.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How does the pricing work?</h3>
+                <p>Our pricing is based on the number of students and modules required. Contact us for a customized quote.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I get a demo of the system?</h3>
+                <p>Yes, we offer free demos to educational institutions. Please contact us to schedule a demonstration.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is training provided with the system?</h3>
+                <p>Yes, we provide comprehensive training sessions for administrators, teachers, and staff.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* General Styles */
+    .contact-container {
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+    
+    .contact-hero {
+        background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), 
+                    url("{{ url_for('static', filename='images/school.png') }}");
+        background-size: cover;
+        background-position: center;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        margin-bottom: 50px;
+    }
+    
+    .hero-overlay {
+        padding: 20px;
+    }
+    
+    .contact-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        border-bottom: none;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .tagline {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+    
+    /* Contact Info Styling */
+    .contact-info-column {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .info-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+    }
+    
+    .info-card h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .info-card h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: #3498db;
+    }
+    
+    .contact-detail {
+        display: flex;
+        margin-bottom: 25px;
+        align-items: flex-start;
+    }
+    
+    .contact-detail i {
+        font-size: 1.5rem;
+        color: #3498db;
+        margin-right: 15px;
+        margin-top: 5px;
+    }
+    
+    .contact-detail h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.1rem;
+        color: #2c3e50;
+    }
+    
+    .contact-detail p {
+        margin: 0;
+        color: #7f8c8d;
+    }
+    
+    .contact-detail a {
+        color: #3498db;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .contact-detail a:hover {
+        color: #2980b9;
+        text-decoration: underline;
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #ecf0f1;
+        color: #2c3e50;
+        transition: all 0.3s;
+    }
+    
+    .social-link:hover {
+        background-color: #3498db;
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    .map-container {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        height: 300px;
+    }
+    
+    /* Form Styling */
+    .contact-form-column {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+        height: 100%;
+    }
+    
+    .form-card h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .form-card h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: #3498db;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #ecf0f1;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+    }
+    
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-left: 35px;
+        cursor: pointer;
+        user-select: none;
+        font-size: 0.95rem;
+        color: #7f8c8d;
+    }
+    
+    .checkbox-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+    
+    .checkmark {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #f8f9fa;
+        border: 2px solid #ecf0f1;
+        border-radius: 4px;
+    }
+    
+    .checkbox-container:hover input ~ .checkmark {
+        background-color: #eef2f7;
+    }
+    
+    .checkbox-container input:checked ~ .checkmark {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+    
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+    
+    .checkbox-container input:checked ~ .checkmark:after {
+        display: block;
+    }
+    
+    .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+    
+    .submit-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        background: linear-gradient(135deg, #2980b9, #2c3e50);
+    }
+    
+    .submit-btn:active {
+        transform: translateY(-1px);
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+        background-color: #f8f9fa;
+        padding: 60px 0;
+        margin: 50px 0;
+    }
+    
+    .faq-section h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #2c3e50;
+        position: relative;
+        padding-bottom: 15px;
+        display: inline-block;
+    }
+    
+    .faq-section h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background-color: #3498db;
+    }
+    
+    .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+    
+    .faq-item {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        transition: transform 0.3s;
+    }
+    
+    .faq-item:hover {
+        transform: translateY(-5px);
+    }
+    
+    .faq-item h3 {
+        color: #3498db;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+    }
+    
+    .faq-item p {
+        color: #7f8c8d;
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-hero h1 {
+            font-size: 2.5rem;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .contact-grid,
+        .faq-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contactForm');
+        
+        // Simple form validation
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission success
+            alert('Thank you for your message! We will get back to you soon.');
+            form.reset();
+        });
+        
+        // Input focus effects
+        const inputs = document.querySelectorAll('.form-group input, .form-group textarea');
+        
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('input-focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.parentElement.classList.remove('input-focused');
+                }
+            });
+            
+            // Check if input has value on page load
+            if (input.value !== '') {
+                input.parentElement.classList.add('input-focused');
+            }
+        });
+    });
+</script>
+{% endblock %}

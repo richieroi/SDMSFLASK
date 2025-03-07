@@ -3,40 +3,18 @@
 {% block title %}Edit Announcement - School Management System{% endblock %}
 
 {% block content %}
-<h1><i class="fas fa-bullhorn"></i> Edit Announcement</h1>
+<h1><i class="fas fa-edit"></i> Edit Announcement</h1>
 
 <div class="form">
     <form method="POST">
         <div class="form-group">
-            <label for="title"><i class="fas fa-heading"></i> Title:</label>
-            <input type="text" id="title" name="title" value="{{ announcement.Title }}" required>
+            <label for="title"><i class="fas fa-heading"></i> Announcement Title:</label>
+            <input type="text" id="title" name="title" value="{{ announcement.title }}" required>
         </div>
-        
         <div class="form-group">
-            <label for="content"><i class="fas fa-edit"></i> Content:</label>
-            <textarea id="content" name="content" rows="10" required>{{ announcement.Content }}</textarea>
-            <div class="form-hint">Markdown formatting is supported.</div>
+            <label for="content"><i class="fas fa-file-alt"></i> Announcement Content:</label>
+            <textarea id="content" name="content" rows="10" required>{{ announcement.content }}</textarea>
         </div>
-        
-        <div class="form-group">
-            <label for="expiry_date"><i class="fas fa-calendar"></i> Expiry Date (optional):</label>
-            <input type="date" id="expiry_date" name="expiry_date" value="{{ announcement.ExpiryDateFormatted }}">
-            <div class="form-hint">Leave blank for no expiry date.</div>
-        </div>
-        
-        <div class="form-group">
-            <label for="course_id"><i class="fas fa-book"></i> Course (optional):</label>
-            <select id="course_id" name="course_id">
-                <option value="" {% if not announcement.CourseID %}selected{% endif %}>General Announcement (All Users)</option>
-                {% for course in courses %}
-                <option value="{{ course.CourseID }}" {% if announcement.CourseID == course.CourseID %}selected{% endif %}>
-                    {{ course.CourseCode }}: {{ course.CourseName }}
-                </option>
-                {% endfor %}
-            </select>
-            <div class="form-hint">Leave as "General" to make this announcement visible to all users.</div>
-        </div>
-        
         <div class="form-actions">
             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Announcement</button>
             <a href="{{ url_for('announcements.announcements_home') }}" class="btn"><i class="fas fa-times"></i> Cancel</a>

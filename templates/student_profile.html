@@ -3,6 +3,18 @@
 {% block title %}Student Profile - School Management System{% endblock %}
 
 {% block content %}
+<div class="profile-header">
+    <h1>{{ student.first_name }} {{ student.last_name }}</h1>
+    <div class="profile-actions">
+        <a href="{{ url_for('index') }}" class="btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="{{ url_for('students_list') }}" class="btn">
+            <i class="fas fa-arrow-left"></i> Back to Students
+        </a>
+    </div>
+</div>
+
 <h1><i class="fas fa-user"></i> Student Profile</h1>
 
 <div class="profile-details">
@@ -70,6 +82,23 @@
 {% endif %}
 
 <style>
+    .profile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-actions .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-left: 10px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+    }
+
     .profile-details {
         margin-bottom: 30px;
     }

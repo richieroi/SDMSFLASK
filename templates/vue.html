@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - School Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="landing-container">
+            <header class="landing-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>School Management</span>
+                </div>
+                <nav class="top-nav">
+                    <a href="{{ url_for('index') }}">Home</a>
+                    <a href="{{ url_for('about') }}">About Us</a>
+                    <a href="{{ url_for('contact') }}">Contact</a>
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                </nav>
+            </header>
+            <div class="landing-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">School Management System</h1>
+                    <p>A comprehensive platform for managing your educational institution</p>
+                    <div class="hero-buttons">
+                        <a href="{{ url_for('auth.login') }}" class="hero-btn primary-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="hero-btn secondary-btn">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!'
+            }
+        });
+    </script>
+</body>
+</html>
